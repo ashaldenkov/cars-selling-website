@@ -38,16 +38,16 @@ const Header = () => {
             с лицензией автодилера - WEGUGIN KTI INC.
             </p>
             <div className={styles.pcOnly}>
-              <Socials/>
+              <Socials color='light'/>
             </div>
             <button className={`${styles.calcBtn} ${styles.pcOnly}`}>Расчет стоимости</button>
             <button className={styles.contactBtn}>Оставить заявку</button>
           </div>
           <nav className={styles.navigation}>
             <div className={styles.mobile}>
-                <Socials/>
+                <Socials color='light'/>
             </div>
-            <div className={styles.pcOnly}>
+            <div className={`${styles.pcOnly} ${styles.navBar}`}>
               <Link href='/catalog' className={styles.link}>
                 Автомобили
               </Link>
@@ -74,10 +74,12 @@ const Header = () => {
              <p>+82 (10) 73-58-56-96</p>
             </a>
             <button className={styles.burgerBtn} onClick={handleClick}>
-              <Image
-                  src={Burger}
-                  alt="Burger menu"
-                  />
+              {!isOpen ? (
+                <Image
+                src={Burger}
+                alt="Burger menu"
+                />) 
+                : null}
             </button>
           </nav>
     </div>
