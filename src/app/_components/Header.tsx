@@ -43,9 +43,9 @@ const Header = () => {
               <div className='hidden lg:block'>
                 <Socials color='light'/>
               </div>
-              <button className='max-lg:hidden text-white bg-slate-700 rounded-md text-sm px-4 h-10 duration-500 hover:bg-slate-900 mx-2'
+              <button className='max-lg:hidden text-white bg-slate-700 rounded-md text-sm px-4 h-10 duration-500 hover:bg-slate-900 mx-2 leading-5'
                 >Расчет стоимости</button>
-              <button className='text-white rounded-md text-sm px-4 h-10 bg-btn duration-500 hover:bg-slate-700'
+              <button className='text-white rounded-md text-sm px-4 h-10 bg-btn duration-500 hover:bg-slate-700 leading-5'
                 >Оставить заявку</button>
             </div>
           </div>
