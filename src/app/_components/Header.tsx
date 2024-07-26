@@ -45,7 +45,7 @@ const Header = () => {
               </div>
               <button className='max-lg:hidden text-white bg-slate-700 rounded-md text-sm px-4 h-10 duration-500 hover:bg-slate-900 mx-2 leading-5'
                 >Расчет стоимости</button>
-              <button className='text-white rounded-md text-sm px-4 h-10 bg-btn duration-500 hover:bg-slate-700 leading-5'
+              <button className='text-white rounded-md text-sm px-4 h-10 bg-btn duration-500 hover:bg-slate-700 leading-5 max-[375px]:w-[90px] max-[375px]:px-0 max-[375px]:text-xs'
                 >Оставить заявку</button>
             </div>
           </div>
@@ -76,14 +76,15 @@ const Header = () => {
                   <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-px bg-slate-50"></span>
                 </Link>
               </div>
-              <a href={`tel:${+821073585696}`} className='text-white flex items-center text-sm'>
+              <a href={`tel:${+821073585696}`} className='text-white flex items-center text-sm max-[375px]:text-center max-[375px]:text-xs '>
                 <Image
                     src={PhoneIcon}
                     width={16}
                     height={16}
                     alt="Call Us"
+                    className='max-[375px]:ml-2'
                     />
-              <p className='ml-2'>+82 (10) 73-58-56-96</p>
+              <p className='ml-2 max-[375px]:ml-0'>+82 (10) 73-58-56-96</p>
               </a>
               <button className='bg-slate-800 lg:hidden' onClick={handleClick}>
                   <Image
@@ -94,8 +95,8 @@ const Header = () => {
             </nav>
           </div>
           {isOpen ? (
-            <div className={`fixed w-screen h-screen z-2 bg-slate-800 top-0 left-0 -translate-x-full animate-appear`}>
-              <Modal/>
+            <div className={`fixed w-screen h-screen z-10 bg-slate-800 top-0 left-0 -translate-x-full animate-appear`}>
+              <Modal handleClick={handleClick}/>
             </div>) : null}
     </div>
   )

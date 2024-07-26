@@ -11,7 +11,6 @@ export default {
         'yellowAd': '#F1CC07',
         'adText': '#7E6B05',
         'pageActive': '#F2F5FE',
-        
       },
       fontFamily: {
         sans: ["var(--font-inter-sans)", ...fontFamily.sans],
@@ -32,8 +31,12 @@ export default {
       },
       fontSize: {
         sm: ['14px', '24px'],
+        med: ['15px', '18px'],
         lg: ['18px', '24px']
       },
+      gridTemplateRows: {
+        'special8': 'repeat(8, 18px))'
+      }
     }
   },
   plugins: [],

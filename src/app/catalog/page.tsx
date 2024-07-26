@@ -1,28 +1,36 @@
 import ContacsUs from "../_components/ContacsUs"
 import AdsBanner from '../_components/Ads'
 import PaginationComponent from '../_components/Pagination'
+import Breadcrumbs from "../_components/Breadcrumbs"
+import Filter from "../_components/Filter"
+import CarCard from "../_components/CarCard"
+
+
+
 export default function Details() {
     return (
     <div className="flex justify-center">
 
-      <div className="flex flex-col items-center h-screen max-w-[720px]">
-        <div>breadcrumbs</div>
-        <div className="max-lg:order-first">
-            <div>filter</div>
+      <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
+        <Breadcrumbs/>
+        <div className="max-lg:order-first w-full flex flex-col items-center">
+            <Filter/>
             <AdsBanner/>
         </div>
-        <div>
-          <div>
-            found total
+        <div className="w-full flex flex-col items-center">
+          <div className="lg:mt-10 mb-[25px] py-[15px] max-lg:px-4 text-slate-500 text-base flex justify-start w-full max-w-[720px]">
+            Найдено: {56}
           </div>
-          <div>
-            cars list
+          <div className="w-full max-w-[720px]">
+            <CarCard/>
+            <CarCard/>
+            <CarCard/>
           </div>
-            <PaginationComponent/>
+          <PaginationComponent/>
         </div>
       </div>
     
-      <div className="max-lg:hidden ml-4 xl:ml-10 mt-[121px]">
+      <div className="max-lg:hidden ml-4 xl:ml-10 mt-[121px] mb-[50px]">
         <ContacsUs/>
       </div>
     </div>
