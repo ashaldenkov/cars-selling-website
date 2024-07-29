@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import SuccessIcon from '../_images/modal-success.svg'
+import SuccessIcon from '@/app/_images/modal-success.svg'
 const ContactModal = () => {
   return (
     <div className='z-1 bg-white w-[210px] h-[148px] rounded-xl flex flex-col items-center justify-center mx-auto mt-[198px]'>

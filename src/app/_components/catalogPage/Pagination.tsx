@@ -1,6 +1,6 @@
 'use client'
 import ReactPaginate from 'react-paginate';
-import useWindowsize from '../hooks/useWindowsize';
+import useWindowsize from '@/app/hooks/useWindowsize';
 
 
 export default function PaginationComponent() {

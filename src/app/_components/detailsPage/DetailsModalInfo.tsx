@@ -1,13 +1,15 @@
+'use client'
 import React from 'react'
+import DetailsModalButtons from './DetailsModalButtons'
 
 const DetailsModalInfo = () => {
   return (
     <div className='w-full lg:w-[264px]'>
         <div>
             <div className='text-3xl text-slate-900 font-semibold'>{`${new Intl.NumberFormat().format(50000000)} ₩`}</div>
-            <div className='text-sm text-slate-500'>корейских вон</div>
+            <div className='text-sm text-slate-500 pt-[6px]'>корейских вон</div>
         </div>
-        <div className='my-10 border-t border-slate-200'>
+        <div className='my-10 pt-6 border-t border-slate-200'>
             <div className='flex mt-4'>
                 <div className='text-med text-slate-500 w-[156px] shrink-0'>Конфигурация</div>
                 <div className='text-med text-slate-900'>Noblesse</div>
@@ -15,14 +17,6 @@ const DetailsModalInfo = () => {
             <div className='flex mt-4'>
                 <div className='text-med text-slate-500 w-[156px] shrink-0'>Год выпуска</div>
                 <div className='text-med text-slate-900'>2021</div>
-            </div>
-            <div className='flex mt-4'>
-                <div className='text-med text-slate-500 w-[156px] shrink-0'>Объем двигателя</div>
-                <div className='text-med text-slate-900'>1,6</div>
-            </div>
-            <div className='flex mt-4'>
-                <div className='text-med text-slate-500 w-[156px] shrink-0'>Объем двигателя</div>
-                <div className='text-med text-slate-900'>1,6</div>
             </div>
             <div className='flex mt-4'>
                 <div className='text-med text-slate-500 w-[156px] shrink-0'>Объем двигателя</div>
@@ -49,11 +43,7 @@ const DetailsModalInfo = () => {
                 <div className='text-med text-slate-900'>18고3900	</div>
             </div>
         </div>
-        <div className='text-sm font-medium'>
-            <button className='rounded-md w-full h-10 bg-slate-100 text-slate-900 hover:bg-slate-200 transition duration-300'>Страховая история</button>
-            <button className='mt-2 rounded-md w-full h-10 bg-slate-900 text-white hover:bg-slate-700 transition duration-300'>Рассчитать стоимость</button>
-            <button className='mt-2 rounded-md w-full h-10 bg-btn text-white hover:bg-lime-500 transition duration-300'>Оставить заявку</button>
-        </div>
+        <DetailsModalButtons/>
     </div>
   )
 }

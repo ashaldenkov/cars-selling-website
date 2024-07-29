@@ -1,9 +1,9 @@
-import ContacsUs from "../_components/ContacsUs"
-import AdsBanner from '../_components/Ads'
-import PaginationComponent from '../_components/Pagination'
-import Breadcrumbs from "../_components/Breadcrumbs"
-import Filter from "../_components/Filter"
-import CarCard from "../_components/CarCard"
+import ContacsUs from "../_components/sharedComponents/ContacsUs"
+import AdsBanner from '../_components/sharedComponents/Ads'
+import PaginationComponent from '@/app/_components/catalogPage/Pagination'
+import Breadcrumbs from "../_components/sharedComponents/Breadcrumbs"
+import Filter from "@/app/_components/catalogPage/Filter"
+import CarCard from "@/app/_components/catalogPage/CarCard"
 
 
 

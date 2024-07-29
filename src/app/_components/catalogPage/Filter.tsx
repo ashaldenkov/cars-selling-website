@@ -1,6 +1,7 @@
 'use client'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useState } from "react"
+import CustomSelect from "@/app/_components/sharedComponents/CustomSelect"
 
   interface FilterValues {
     carBrand: string;
@@ -27,9 +28,9 @@ const Filter = () => {
   }
 
 
-
   return (
     <div className='bg-slate-50 w-full px-4 py-5 lg:px-[30px] lg:px-[30px] lg:py-[30px]'>
+      <CustomSelect/>
       <form className='' onSubmit={handleSubmit(onSubmit)}>
         <div>
           <div className="lg:flex">

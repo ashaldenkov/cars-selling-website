@@ -7,9 +7,9 @@ import Link from 'next/link'
 
 
 //Logo
-import LogoWhite from '../_images/logo_white.png'
-import PhoneIcon from '../_images/phone-call.svg'
-import Burger from '../_images/burger.svg'
+import LogoWhite from '@/app/_images/logo_white.png'
+import PhoneIcon from '@/app/_images/phone-call.svg'
+import Burger from '@/app/_images/burger.svg'
 
 //icons group
 import Socials from './Socials'

@@ -1,6 +1,8 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
+
+
 export default {
   content: ["./src/**/*.tsx"],
   mode: 'jit',
@@ -11,6 +13,7 @@ export default {
         'yellowAd': '#F1CC07',
         'adText': '#7E6B05',
         'pageActive': '#F2F5FE',
+        'price': '#2D2D2D',
       },
       fontFamily: {
         sans: ["var(--font-inter-sans)", ...fontFamily.sans],

@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { v4 as uuidv4 } from 'uuid';
 import Image from 'next/image'
-import BreadcrumbIcon from '../_images/breadbrumbIcon.svg'
+import BreadcrumbIcon from '@/app/_images/breadbrumbIcon.svg'
 
 
 
@@ -20,7 +20,7 @@ const Breadcrumbs = () => {
         return { breadcrumb: path, href: '/' + linkPath.slice(0, i + 1).join('/') };
     });
     //не добавляем в путь ID машин
-    pathArray = pathArray.slice(0, 1)
+    pathArray = pathArray.slice(0, 2)
 
 const breadcrumbName = (engName: string): string => {
     if (engName == 'catalog') {

@@ -13,7 +13,13 @@ const config = {
         hostname: 's3-alpha-sig.figma.com',
         port: '',
         pathname: '/**'
-    }],
+    },
+    {
+      protocol: 'https',
+        hostname: 'cdn.pixabay.com',
+        port: '',
+        pathname: '/**'
+    },],
   }
 };
 

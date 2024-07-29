@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 //Logo
-import LogoWhite from '../_images/logo_white.png'
+import LogoWhite from '@/app/_images/logo_white.png'
 
 //icons group
 import Socials from './Socials'

@@ -5,8 +5,8 @@ import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
 //components
-import Header from './_components/Header'
-import Footer from './_components/Footer'
+import Header from './_components/layout/Header'
+import Footer from './_components/layout/Footer'
 
 const inter = Inter({ subsets: ["latin"] });
 

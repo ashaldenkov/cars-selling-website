@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Logo from '../_images/AdLogo.png'
+import Logo from '@/app/_images/AdLogo.png'
 
 const Ads = () => {
   return (

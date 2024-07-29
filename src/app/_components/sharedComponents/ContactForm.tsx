@@ -9,13 +9,18 @@ import { useState } from "react"
     contactMethod: string;
   }
 
-const ContactForm = () => {
+  interface closeFromDetailsModal{
+    clickHandle?: ()=>void
+  }
+  
+
+const ContactForm = ({clickHandle}: closeFromDetailsModal) => {
     const { register, reset, watch, handleSubmit } = useForm<ContactValues>()
     const onSubmit: SubmitHandler<ContactValues> = (data) => {
       setFormSubmitted(true)
       console.log(data)
       reset()
-      setTimeout( () => setFormSubmitted(false), 3000)
+      setTimeout( () => { setFormSubmitted(false); clickHandle ? clickHandle() : null }, 3000)
     }
     const [formSubmitted, setFormSubmitted] = useState(false)
 

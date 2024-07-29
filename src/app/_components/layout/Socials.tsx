@@ -4,9 +4,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 //Icons
-import telegram from '../_images/tg.svg'
-import insta from '../_images/inst.svg'
-import facebook from '../_images/fb.svg'
+import telegram from '@/app/_images/tg.svg'
+import insta from '@/app/_images/inst.svg'
+import facebook from '@/app/_images/fb.svg'
 
 type SocialsProps = {
   color: "light" | "dark";

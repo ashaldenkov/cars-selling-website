@@ -2,7 +2,7 @@ import Socials from './Socials'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import LogoWhite from '../_images/logo_white.png'
+import LogoWhite from '@/app/_images/logo_white.png'
 
 interface ModalProps{
   handleClick: () => void
