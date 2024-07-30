@@ -14,6 +14,7 @@ const ContacsUs = ({clickHandle}: closeFromDetailsModal) => {
         <Image
             className='h-auto w-auto'
             src={ContactBanner}
+            priority={true}
             alt="Wegugin Logo"
         />
         <h2 className='text-lg text-slate-900 font-medium text-center'>Перезвоним<br/>в течение 30 минут</h2>

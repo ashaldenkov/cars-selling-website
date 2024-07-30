@@ -11,7 +11,7 @@ export default function PaginationComponent() {
 
   const handlePageClick = (event: Event) => {
     console.log(
-      `User requested page number ${event.selected}`
+      `User requested page number ${event.selected + 1}`
     );
   };
 

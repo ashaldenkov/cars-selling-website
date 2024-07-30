@@ -1,68 +1,108 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from "react";
+import Image from 'next/image'
+import SelectedOption from '@/app/_images/SelectedOption.svg'
 
-const CustomSelect = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectData, setSelectData] = useState('');
+type Option = {
+    label: string;
+    value: string;
+}
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
+type CustomSelect = {
+    options: Option[];
+    data: any;
+    setData: React.Dispatch<React.SetStateAction<any>>;
+    form?: "full" | "half-left" | "half-right";
+  }
+
+  const Icon = ({isOpen}:{isOpen: boolean}) => {
+    return (
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="#222" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" className={`${isOpen ? 'rotate-180' : ''}`}>
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    );
+};
+
+const CustomSelect = ({ options, form, data, setData }: CustomSelect) => {
+
+    const [showMenu, setShowMenu] = useState(false); // Controls the visibility of the dropdown menu
+    const inputRef = useRef<any>(); // Reference to the custom select input element
+
+    useEffect(() => {
+        const handler = (e:any) => {
+            if (inputRef.current && !inputRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        window.addEventListener("click", handler);
+        return () => {
+            window.removeEventListener("click", handler);
+        };
+    });
+    
+    const handleInputClick = () => {
+        setShowMenu(!showMenu);
     };
 
-    const closeDropdown = (e:any) => {
-        setIsOpen(false);
-        setSelectData(e.target.getAttribute('data-value'))
+    const getDisplay = () => {
+        if (!data || data.length === 0) {
+            return options[0]!.label;
+        }
+        return data.label;
     };
 
+    const onItemClick = (option: any) => {
+        let newValue;
+        newValue = option;
+        setData(newValue);
+    };
 
-  return (
-    <div className='w-full py-6 pb-8'>
-        <div className="relative w-fit">
-            <button
-                type="button"
-                className="px-4 py-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
-                focus:ring-blue-300 font-medium rounded-lg text-sm inline-flex items-center"
-                onClick={toggleDropdown}
-            >{`${selectData || 'Марка'}`}</button>
+    const isSelected = (option: any) => {
+        if (!data) {
+            return false;
+        }
 
-            {isOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-44 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                    <ul role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                        <li>
-                            <button
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={closeDropdown}
-                                data-value={`Option 1`}
-                            >
-                                Option 1
-                            </button>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={closeDropdown}
-                                data-value={` Option 2`}
-                            >
-                                Option 2
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={closeDropdown}
-                            >
-                                Option 3
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            )}
+        return data.value === option.value;
+    };
+    
+
+    return (
+        <div className={`relative bg-white select-none h-10 w-full min-lg:max-w-[324px] border border-slate-200 py-2 px-3 
+            ${form == 'full' ? 'rounded-md' : ''} ${form == 'half-left' ? 'w-1/2 rounded-l-md' : ''} ${form == 'half-right' ? 'w-1/2 rounded-r-md' : ''} 
+            text-sm text-slate-900 mb-4 ${showMenu ? 'border-1 border-black' : ''}`}>
+
+            <div ref={inputRef} onClick={handleInputClick} className={`flex justify-between items-center ${(form == "full" || data.value) ? '' : 'text-slate-400'}`}>
+            {getDisplay()}
+            <Icon isOpen={showMenu}/>
+            </div>
+
+            {
+                showMenu && (
+                    <div className={`absolute z-10 bg-white top-[50px] -left-1 w-[212px] p-[5px] rounded-md max-h-[250px]  
+                     overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-slate-600 
+                     [&::-webkit-scrollbar-thumb]:rounded-full`}>
+                            {
+                            options.map((option:any) => (
+                                <div onClick={() => onItemClick(option)} key={option.value} className={`relative flex items-center ${isSelected(option) && "bg-slate-100"}
+                                 ${option.value ? '' : 'font-semibold'} h-10 w-full rounded-md py-2 px-3 text-sm text-slate-900 hover:bg-slate-100 pl-8`} >
+                                    {(isSelected(option) && option.value) && (
+                                                            <Image
+                                                            className='w-auto h-auto absolute left-2'
+                                                            src={SelectedOption}
+                                                            alt="selected"
+                                                            />
+                                    )
+                                    }
+                                    {option.label}
+                                </div>
+                            ))
+                        }
+                    </div>
+                )
+            }
         </div>
-    </div>
-)
-
+    );
 }
 
 export default CustomSelect
