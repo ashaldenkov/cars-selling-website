@@ -1,9 +1,11 @@
-import React from 'react'
 import Image from 'next/image'
-
 import Checkbox  from '@/app/_images/priceCheckbox.svg'
+import CalculatorForm from './CalculatorForm'
+
 
 const Calculator = () => {
+
+
   return (
     <div className='max-lg:px-4 mb-10 max-lg:mb-8' id='calculator'>
         <div className='border-b border-slate-200'>
@@ -11,7 +13,7 @@ const Calculator = () => {
             <div className='text-sm text-slate-500 py-5'>*конечная цена может меняться в зависимости от курса валют.</div>
         </div>
         <div className='mt-[47px] border-b border-slate-200'>
-            <div className=''>FORM HERE</div>
+            <CalculatorForm/>
         </div>
         <div>
             <div className='mt-5'>
