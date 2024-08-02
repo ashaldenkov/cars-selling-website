@@ -3,10 +3,11 @@ import Image from 'next/image'
 import ContactForm from './ContactForm'
 
 interface closeFromDetailsModal{
-  clickHandle?: ()=>void
+  loading?: boolean;
+  clickHandle?: ()=>void;
 }
 
-const ContacsUs = ({clickHandle}: closeFromDetailsModal) => {
+const ContacsUs = ({clickHandle, loading}: closeFromDetailsModal) => {
 
   return (
     <div className="h-[545px] w-[264px] bg-slate-50 sticky top-0 
@@ -19,7 +20,7 @@ const ContacsUs = ({clickHandle}: closeFromDetailsModal) => {
         />
         <h2 className='text-lg text-slate-900 font-medium text-center'>Перезвоним<br/>в течение 30 минут</h2>
         <p className='mt-2.5 text-center text-slate-500 text-sm	font-normal'>Наши менеджеры проведут вам консультацию и помогут в выборе авто</p>
-        <ContactForm clickHandle={clickHandle}/>
+        <ContactForm clickHandle={clickHandle} loading={loading}/>
     </div>
   )
 }

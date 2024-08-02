@@ -1,6 +1,6 @@
 'use client'
 import { useForm, SubmitHandler } from "react-hook-form"
-import { useState, useRef  } from "react"
+import { useState  } from "react"
 import CustomSelect from "@/app/_components/sharedComponents/CustomSelect"
 
   interface FilterValues {
@@ -11,6 +11,11 @@ import CustomSelect from "@/app/_components/sharedComponents/CustomSelect"
     mileageTo: string;
   }
 
+  interface Filter {
+    loading?: true;
+    notFound?:boolean;
+  }
+
   const Icon = ({isOpen}:{isOpen: boolean}) => {
     return (
         <svg viewBox="0 0 24 24" width="18" height="18" stroke="#222" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" className={`${isOpen ? 'rotate-180' : ''}`}>
@@ -19,7 +24,7 @@ import CustomSelect from "@/app/_components/sharedComponents/CustomSelect"
     );
 };
 
-const Filter = () => {
+const Filter = ({loading, notFound}:Filter) => {
 
   const carBrandOptions = [
     {
@@ -258,11 +263,17 @@ const Filter = () => {
     transmission: null,
     color: null,
 }); 
-// const priceFromRef = useRef<any>()
 
-// priceFromRef.current.addEventListener('input', function(){
-//   priceFromRef.current.value =(parseInt(priceFromRef.current.value)).toLocaleString('ru-Ru')
-// })
+const spaces = (e:any) => {
+  if (e.target.value) {
+    if (parseInt(e.target.value)) {
+      e.target.value = e.target.value.replace(/\s/g, "")
+      e.target.value = parseInt(e.target.value).toLocaleString('ru-Ru')
+    }
+    else e.target.value = e.target.value.slice(0,-1)
+  }
+}
+
   const { register, reset, handleSubmit } = useForm<FilterValues>()
 
   const onSubmit: SubmitHandler<FilterValues> = (data) => {
@@ -274,7 +285,8 @@ const Filter = () => {
     }) 
     //объединяем с инпутами формы
     result = {...result, ...data}
-    
+    result.priceFrom = result.priceFrom.replace(/\s/g, "")
+    result.priceTo = result.priceTo.replace(/\s/g, "")
     console.log(result)
   }
 
@@ -373,24 +385,24 @@ const Filter = () => {
           <div className="flex">
             <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pr-[6px]">
               <input
-                {...register("priceFrom")} 
+                {...register("priceFrom", loading ? {  disabled: true} : {})} 
                 id="priceFrom"
-                type="text"
+                onChange={spaces}
                 placeholder='Цена от, ₩'
-                className='mb-[30px] focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-l-md border border-slate-200 py-2 px-3 text-sm'
+                className='mb-[30px] focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-l-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
               />
               <input
-                {...register("priceTo")} 
+                {...register("priceTo", loading ? {  disabled: true} : {})} 
                 id="priceTo"
-                type="text"
+                onChange={spaces}
                 placeholder='до'
-                className='mb-[30px] focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-r-md border border-slate-200 py-2 px-3 text-sm'
+                className='mb-[30px] focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-r-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
               />
             </div>
             <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] max-[720px]:hidden">
               <input
-                  {...register("carNumber")} 
-                  className='mb-3 h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm max-[720px]:hidden'
+                  {...register("carNumber", loading ? {  disabled: true} : {})} 
+                  className='mb-3 h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm max-[720px]:hidden disabled:bg-white'
                   id="carNumber"
                   type="text"
                   placeholder='Номер машины'
@@ -435,18 +447,18 @@ const Filter = () => {
             </div>
             <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pr-[6px]">
               <input
-                {...register("mileageFrom")} 
+                {...register("mileageFrom", loading ? {  disabled: true} : {})} 
                 id="mileageFrom"
                 type="text"
                 placeholder='Пробег от'
-                className='mb-3 focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-l-md border border-slate-200 py-2 px-3 text-sm'
+                className='mb-3 focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-l-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
               />
               <input
-                {...register("mileageTo")} 
+                {...register("mileageTo", loading ? {  disabled: true} : {})} 
                 id="mileageTo"
                 type="text"
                 placeholder='до'
-                className='mb-3 focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-r-md border border-slate-200 py-2 px-3 text-sm'
+                className='mb-3 focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-r-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
               />
             </div>
           </div>
@@ -501,17 +513,16 @@ const Filter = () => {
             </div>
             <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] min-[720px]:hidden">
               <input
-                  {...register("carNumber")} 
+                  {...register("carNumber", loading ? {  disabled: true} : {})} 
                   id="carNumber"
                   type="text"
                   placeholder='Номер машины'
-                  className='mb-[30px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm min-[720px]:hidden'
+                  className='mb-[30px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm min-[720px]:hidden disabled:bg-white'
                 />
             </div>
           </div>
         </div> 
       )}
-
 
         <div className="min-[720px]:mt-[30px] text-sm font-medium min-[720px]:flex">
           <div className="flex w-full max-[720px]:mb-2.5 justify-between min-[720px]:mr-[25px]">
@@ -528,11 +539,28 @@ const Filter = () => {
                 Сбросить
               </button>
           </div>
-            <button
-            type="submit"
-            className='block h-10 w-full min-[720px]:w-[130px] rounded-md text-white bg-slate-900 duration-500 hover:bg-slate-700'>
-              Показать
-            </button>
+          {
+            loading ? (
+              <div className='shrink-0 flex items-center justify-center h-10 w-full min-[720px]:min-w-[130px] min-[720px]:w-fit px-4 rounded-md text-white bg-loading'>
+                    <svg aria-hidden="true" className="w-4 h-4 mr-1 text-gray-200 animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                Загрузка...
+              </div>
+            ) : (
+              notFound ? (
+            <div className='shrink-0 flex items-center justify-center h-10 w-full min-[720px]:min-w-[130px] min-[720px]:w-fit px-4 rounded-md text-white bg-loading'>
+              Ничего не найдено
+            </div>
+              ) :(
+              <button
+              type="submit"
+              className='shrink-0 h-10 w-full min-[720px]:min-w-[130px] min-[720px]:w-fit px-4 rounded-md text-white bg-slate-900 duration-500 hover:bg-slate-700'>
+                Показать
+              </button>
+            ))
+          }
 
         </div>
 

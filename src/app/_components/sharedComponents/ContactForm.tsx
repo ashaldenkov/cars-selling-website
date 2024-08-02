@@ -10,11 +10,12 @@ import { useState } from "react"
   }
 
   interface closeFromDetailsModal{
+    loading?: boolean;
     clickHandle?: ()=>void
   }
   
 
-const ContactForm = ({clickHandle}: closeFromDetailsModal) => {
+const ContactForm = ({clickHandle, loading}: closeFromDetailsModal) => {
     const { register, reset, watch, handleSubmit } = useForm<ContactValues>()
     const onSubmit: SubmitHandler<ContactValues> = (data) => {
       setFormSubmitted(true)
@@ -35,36 +36,41 @@ const ContactForm = ({clickHandle}: closeFromDetailsModal) => {
         <form className='mt-[30px]' onSubmit={handleSubmit(onSubmit)}>
 
           <input
-          {...register("name", { required: true })} 
+          {...register("name", loading ? {  disabled: true} : { required: true })} 
             id="name"
             type="text"
             placeholder='Имя'
-            className='mt-[10px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm'
+            className='mt-[10px] h-10 w-full rounded-md border disabled:bg-white border-slate-200 py-2 px-3 text-sm'
           />
 
           <input
-            {...register("tel", { required: true })} 
+            {...register("tel", loading ? {  disabled: true} : { required: true })} 
             id="tel"
             type="tel"
             placeholder='Номер телефона'
-            className='mt-[10px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm'
+            className='mt-[10px] h-10 w-full rounded-md border disabled:bg-white border-slate-200 py-2 px-3 text-sm'
           />
 
-          <select id="contact-method-select" {...register("contactMethod", {
-    required: true
-  })}
-            className={`mt-[10px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm ${!watch("contactMethod") ? 'text-slate-400' : ''}`}>
+          <select id="contact-method-select" {...register("contactMethod", loading ? {  disabled: true} : { required: true })}
+            className={`mt-[10px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 disabled:bg-white text-sm ${!watch("contactMethod") ? 'text-slate-400' : ''}`}>
                 <option value="" className='text-slate-900'>Способ связи</option>
                 <option value="whatsapp" className='text-slate-900'>WhatsApp</option>
                 <option value="telegram" className='text-slate-900'>Telegram</option>
                 <option value="call" className='text-slate-900'>Звонок</option>
           </select>
-
-          <button
-          type="submit"
-          className='block mt-[10px] h-10 w-full rounded-md text-sm text-white bg-slate-900'>
+          { loading ? (
+          <div
+          className='flex items-center justify-center mt-[10px] h-10 w-full rounded-md text-sm text-white bg-slate-900'>
             Оставить заявку
-          </button>
+          </div>
+          ) : (
+            <button
+            type="submit"
+            className='block mt-[10px] h-10 w-full rounded-md text-sm text-white bg-slate-900'>
+              Оставить заявку
+            </button>
+          )}
+
         </form>
       </div>
   )

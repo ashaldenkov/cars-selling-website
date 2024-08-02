@@ -128,7 +128,7 @@ const ImageCarousel = () => {
                                 <SwiperSlide key={index}>
                                     <div onClick={() => firstSwiper.slideTo(index)}>
                                         <Image
-                                        className={`object-cover ${ activeIndex==index ? 'scale-[0.85]' : null}`}
+                                        className={`object-cover h-[100px] ${ activeIndex==index ? 'scale-[0.85]' : null}`}
                                         priority={true}
                                         src={imageLink}
                                         width={1024}

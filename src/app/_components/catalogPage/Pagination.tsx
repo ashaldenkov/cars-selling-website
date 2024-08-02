@@ -1,15 +1,18 @@
 'use client'
 import ReactPaginate from 'react-paginate';
 import useWindowsize from '@/app/hooks/useWindowsize';
+import { useState } from 'react';
 
 
 export default function PaginationComponent() {
+  const [currPage, setCurrpage] = useState(0)
 
   interface Event {
     selected: number;
   }
 
   const handlePageClick = (event: Event) => {
+    setCurrpage(event.selected)
     console.log(
       `User requested page number ${event.selected + 1}`
     );
@@ -21,9 +24,9 @@ export default function PaginationComponent() {
   let rangeDisplayed: number
 
   if (size?.width && size?.width < 1024) {
-    rangeDisplayed = 2
+      rangeDisplayed = 2
   } else {
-    rangeDisplayed = 3
+      rangeDisplayed = 3
   }
 
   return (
@@ -33,14 +36,19 @@ export default function PaginationComponent() {
             
             breakLabel='...'
             breakLinkClassName={'flex items-center justify-center h-10 border border-slate-100 w-[37px]'}
-
+            breakClassName={`${(currPage > 2 && currPage < 47 && rangeDisplayed == 2) ? '[&:nth-child(3)]:hidden' : '' }`}
             onPageChange={handlePageClick}
             pageCount={50}
             pageRangeDisplayed={rangeDisplayed}
             marginPagesDisplayed={1}
 
             pageLinkClassName={'h-10 px-3 flex items-center '}
-            pageClassName={'border border-slate-100 [&:nth-child(2)]:rounded-l-lg [&:nth-last-child(2)]:rounded-r-lg hover:bg-pageActive'}
+            pageClassName={`border border-slate-100 [&:nth-child(2)]:rounded-l-lg [&:nth-last-child(2)]:rounded-r-lg hover:bg-pageActive
+              ${(currPage == 1 && rangeDisplayed == 2)? '[&:nth-child(1)]:hidden ' : ''}
+              ${(currPage == 2 && rangeDisplayed == 2)? '[&:nth-child(2)]:hidden [&:nth-child(3)]:rounded-l-lg' : ''}
+              ${(currPage == 3 && rangeDisplayed == 2)? '[&:nth-child(2)]:hidden [&:nth-child(3)]:hidden [&:nth-child(4)]:rounded-l-lg' : ''}
+              ${(currPage > 3 && currPage < 47 && rangeDisplayed == 2)? '[&:nth-child(2)]:hidden [&:nth-child(4)]:rounded-l-lg' : ''}
+              ${(currPage == 47 && rangeDisplayed == 2)? '[&:nth-child(4)]:hidden' : ''}`}
             activeClassName={'paginationActive bg-pageActive border-slate-900'}
 
             nextLabel={<div className="flex items-center py-2 px-8 border border-slate-100 rounded-md hover:bg-pageActive">Вперед</div>}

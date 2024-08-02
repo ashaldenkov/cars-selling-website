@@ -14,6 +14,7 @@ export default {
         'adText': '#7E6B05',
         'pageActive': '#F2F5FE',
         'price': '#2D2D2D',
+        'loading': '#838893'
       },
       fontFamily: {
         sans: ["var(--font-inter-sans)", ...fontFamily.sans],
