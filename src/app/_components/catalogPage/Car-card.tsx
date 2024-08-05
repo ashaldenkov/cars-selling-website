@@ -14,7 +14,7 @@ const CarCard = () => {
     <Link href={`/catalog/details/${1}`} className='block border-b border-slate-200 w-full max-w-[720px] py-4 lg:py-9 max-lg:px-4 rounded lg:flex hover:bg-slate-100'>
         <div className='text-slate-900 lg:hidden'>New kia K5 Hybrid Noblesse</div>
         <div>
-            <div className='text-slate-900 text-lg font-semibold whitespace-nowrap'>{`${new Intl.NumberFormat().format(50000000)} ₩`}</div>
+            <div className='text-slate-900 text-lg font-semibold whitespace-nowrap'>{`${new Intl.NumberFormat("ru-RU").format(50000000)} ₩`}</div>
             <div className='max-lg:hidden text-sm text-slate-500 text-end'>корейских вон</div>
         </div>
         <div className='flex max-lg:mt-2.5 lg:order-first'>

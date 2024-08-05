@@ -14,7 +14,6 @@ const LoadingDetails = () => {
             <div className="w-full order-first">
                 <Breadcrumbs/>
             </div>
-
             {/* Image carousel */}
             <div className="w-full">
                 <div className="w-full h-[293px] lg:h-[480px] flex items-center justify-center mb-5">

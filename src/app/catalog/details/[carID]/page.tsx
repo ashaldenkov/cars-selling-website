@@ -12,7 +12,7 @@ import LoadingCalc from "@/app/_components/LoadingVersionPages/Loading-calculato
 import ImageCarousel from "@/app/_components/detailsPage/Image-carousel";
 
 async function getSomething() {  
-    await new Promise(resolve => setTimeout(resolve, 3000))
+    await new Promise(resolve => setTimeout(resolve, 5000))
 
     const res = await fetch('https://jsonplaceholder.typicode.com/users')
     .then(response => response.json())

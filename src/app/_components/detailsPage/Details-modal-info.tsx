@@ -5,7 +5,7 @@ const DetailsModalInfo = () => {
   return (
     <div className='w-full lg:w-[264px]'>
         <div>
-            <div className='text-3xl text-slate-900 font-semibold'>{`${new Intl.NumberFormat().format(50000000)} ₩`}</div>
+            <div className='text-3xl text-slate-900 font-semibold'>{`${new Intl.NumberFormat("ru-RU").format(50000000)} ₩`}</div>
             <div className='text-sm text-slate-500 pt-[6px]'>корейских вон</div>
         </div>
         <div className='my-10 pt-6 border-t border-slate-200'>

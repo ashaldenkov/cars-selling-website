@@ -9,7 +9,7 @@ import NotFoundCatalog from "@/app/_components/LoadingVersionPages/Not-found-cat
 //imitating loading data
 async function getSomething() {  
   //delay here
-  await new Promise(resolve => setTimeout(resolve, 0))
+  await new Promise(resolve => setTimeout(resolve, 1000))
   //if link is /users then we load data, if /users/asdasd then it will be not found
   const res = await fetch('https://jsonplaceholder.typicode.com/users/')
   .then(response => response.json())
