@@ -10,10 +10,6 @@ import Scratches  from '@/app/_images/InsuranceIcons/scratches.png'
 
 
 
-const typeClass = `text-med text-slate-500 mr-4 lg:mr-10 shrink-0 w-1/2`
-const detailClass = `text-med text-slate-900`
-
-
 const InsuranceHistory = () => {
   return (
     <div className="max-lg:px-4 w-full" id="insurance">

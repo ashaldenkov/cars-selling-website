@@ -3,12 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from 'next/image'
 import SelectedOption from '@/app/_images/SelectedOption.svg'
 
-type Option = {
+interface Option {
     label: string;
     value: string;
 }
 
-type CustomSelect = {
+interface CustomSelect {
     options: Option[];
     data: any;
     setData: React.Dispatch<React.SetStateAction<any>>;

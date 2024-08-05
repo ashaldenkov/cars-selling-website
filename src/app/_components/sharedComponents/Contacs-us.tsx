@@ -1,6 +1,6 @@
 import ContactBanner from '@/app/_images/contact-banner.png'
 import Image from 'next/image'
-import ContactForm from './ContactForm'
+import ContactForm from './Contact-form'
 
 interface closeFromDetailsModal{
   loading?: boolean;

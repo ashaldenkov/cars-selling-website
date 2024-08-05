@@ -10,7 +10,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 
-
+//simulating photo links
  const imgData = ['https://s3-alpha-sig.figma.com/img/c764/9fbc/6fd5409ec9bb97a8d321bb51b541cdab?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZlNzDIHIPu5eqyNFX6CcxRzJyCWN-vQFijNmqiTSzXQ4o7oUYghskMIF9P5TsRC1v4BsvH9PVhAEjvbG1jaSWfabA-8ObvwPbT~IAYHCY00aVM1v6~aWZAqh7M4kjrsf8ocrkz208MENfrTAzBYFBzT8O2Y0l0PgbAly-PVwvPBzcfoN2VE0TyqY9y-zOrQ6klAbbpLIosZvbXXJkjfw5nkLaTATE9eGVVNvgEP4cEdnVvhEZ6reIFxrUht7bKdUaUpiPjIcexwSHGuDrl7eTO~EKmNsW3TwvhPTTbHEn-SHtNDVjiZGEDouNC2ZUUIoEVDMKAXbIggo8-2guF2ePA__',
 'https://s3-alpha-sig.figma.com/img/c764/9fbc/6fd5409ec9bb97a8d321bb51b541cdab?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZlNzDIHIPu5eqyNFX6CcxRzJyCWN-vQFijNmqiTSzXQ4o7oUYghskMIF9P5TsRC1v4BsvH9PVhAEjvbG1jaSWfabA-8ObvwPbT~IAYHCY00aVM1v6~aWZAqh7M4kjrsf8ocrkz208MENfrTAzBYFBzT8O2Y0l0PgbAly-PVwvPBzcfoN2VE0TyqY9y-zOrQ6klAbbpLIosZvbXXJkjfw5nkLaTATE9eGVVNvgEP4cEdnVvhEZ6reIFxrUht7bKdUaUpiPjIcexwSHGuDrl7eTO~EKmNsW3TwvhPTTbHEn-SHtNDVjiZGEDouNC2ZUUIoEVDMKAXbIggo8-2guF2ePA__',
 'https://s3-alpha-sig.figma.com/img/c764/9fbc/6fd5409ec9bb97a8d321bb51b541cdab?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZlNzDIHIPu5eqyNFX6CcxRzJyCWN-vQFijNmqiTSzXQ4o7oUYghskMIF9P5TsRC1v4BsvH9PVhAEjvbG1jaSWfabA-8ObvwPbT~IAYHCY00aVM1v6~aWZAqh7M4kjrsf8ocrkz208MENfrTAzBYFBzT8O2Y0l0PgbAly-PVwvPBzcfoN2VE0TyqY9y-zOrQ6klAbbpLIosZvbXXJkjfw5nkLaTATE9eGVVNvgEP4cEdnVvhEZ6reIFxrUht7bKdUaUpiPjIcexwSHGuDrl7eTO~EKmNsW3TwvhPTTbHEn-SHtNDVjiZGEDouNC2ZUUIoEVDMKAXbIggo8-2guF2ePA__',
@@ -39,6 +39,7 @@ const ImageCarousel = () => {
 
   return (
     <div className='w-full z-0'>
+
         {/*Main slider*/}
         <Swiper
         modules={[Pagination, Controller]}
@@ -87,8 +88,6 @@ const ImageCarousel = () => {
                 alt="control arrow"
                 />
             </button>
-
-
         </Swiper>
 
         {/*Thumbs pc*/}

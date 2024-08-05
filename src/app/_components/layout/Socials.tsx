@@ -8,7 +8,7 @@ import telegram from '@/app/_images/tg.svg'
 import insta from '@/app/_images/inst.svg'
 import facebook from '@/app/_images/fb.svg'
 
-type SocialsProps = {
+interface SocialsProps {
   color: "light" | "dark";
 }
 

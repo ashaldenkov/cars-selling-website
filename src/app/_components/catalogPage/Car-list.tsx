@@ -1,8 +1,8 @@
 import React from 'react'
-import CarCard from "@/app/_components/catalogPage/CarCard"
+import CarCard from "@/app/_components/catalogPage/Car-card"
 
 
-type CarList = {
+interface CarList {
   data: any;
 }
 

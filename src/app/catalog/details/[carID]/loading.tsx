@@ -1,8 +1,8 @@
 import Breadcrumbs from "@/app/_components/sharedComponents/Breadcrumbs"
 import AdsBanner from '@/app/_components/sharedComponents/Ads'
-import InsuranceHistoryLoading from "@/app/_components/detailsPage/InsuranceHistoryLoading";
+import InsuranceHistoryLoading from "@/app/_components/detailsPage/Insurance-history-loading";
 import Calculator from "@/app/_components/detailsPage/Calculator";
-import DetailsModalButtons from '@/app/_components/detailsPage/DetailsModalButtons'
+import DetailsModalButtons from '@/app/_components/detailsPage/Details-modal-buttons'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -72,7 +72,7 @@ const LoadingDetails = () => {
                 <Breadcrumbs/>
             </div>
         </div>
-
+        {/* Modal on PC */}
         <div className="max-lg:hidden ml-4 xl:ml-10 mt-[200px] mb-[50px] sticky top-0 h-fit pt-11">
                 <div className='w-full lg:w-[264px]'>
                     <div className="">

@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Checkbox  from '@/app/_images/priceCheckbox.svg'
-import CalculatorForm from './CalculatorForm'
+import CalculatorForm from '../detailsPage/Calculator-form'
 
-type Calc = {
+interface Calc {
     loading?: boolean;
 }
 

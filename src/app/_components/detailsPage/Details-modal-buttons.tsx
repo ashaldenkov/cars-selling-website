@@ -1,9 +1,9 @@
 'use client'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import ContacsUs from "@/app/_components/sharedComponents/ContacsUs"
+import ContacsUs from "@/app/_components/sharedComponents/Contacs-us"
 
-type Buttons = {
+interface Buttons {
     loading?: boolean;
 }
 

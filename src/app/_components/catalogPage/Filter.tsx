@@ -1,7 +1,7 @@
 'use client'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { useState  } from "react"
-import CustomSelect from "@/app/_components/sharedComponents/CustomSelect"
+import CustomSelect from "@/app/_components/sharedComponents/Custom-select"
 
   interface FilterValues {
     priceFrom: string;

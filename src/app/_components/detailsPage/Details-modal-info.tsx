@@ -1,5 +1,5 @@
 import React from 'react'
-import DetailsModalButtons from './DetailsModalButtons'
+import DetailsModalButtons from './Details-modal-buttons'
 
 const DetailsModalInfo = () => {
   return (

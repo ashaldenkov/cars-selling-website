@@ -1,5 +1,5 @@
 'use client'
-import CustomSelect from '../sharedComponents/CustomSelect'
+import CustomSelect from '../sharedComponents/Custom-select'
 import { useState } from 'react'
 import { useForm, SubmitHandler, Controller  } from "react-hook-form"
 
@@ -101,7 +101,7 @@ const engineCapacityOptions = [
       }, wait);
     };
   }
-  type CalcForm = {
+  interface CalcForm {
     loading?: boolean;
   }
   const spaces = (e:any) => {
