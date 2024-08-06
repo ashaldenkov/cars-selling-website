@@ -7,7 +7,11 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down db",
+    "db:clean": "sudo rm -rf ./pgdata",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
@@ -19,6 +23,7 @@
     "@nextui-org/spinner": "^2.0.33",
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/theme": "^2.2.9",
+    "@prisma/client": "^5.17.0",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.50.0",
     "@trpc/client": "^11.0.0-rc.446",
@@ -54,6 +59,7 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
+    "prisma": "^5.17.0",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.5.3"

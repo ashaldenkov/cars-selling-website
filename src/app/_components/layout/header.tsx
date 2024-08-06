@@ -12,10 +12,10 @@ import PhoneIcon from '@/app/_images/phone-call.svg'
 import Burger from '@/app/_images/burger.svg'
 
 //icons group
-import Socials from './Socials'
+import Socials from './socials'
 
 //modal
-import Modal from './Modal'
+import Modal from './modal'
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false); 

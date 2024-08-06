@@ -1,4 +1,4 @@
-import Socials from './Socials'
+import Socials from './socials'
 import Image from 'next/image'
 import Link from 'next/link'
 

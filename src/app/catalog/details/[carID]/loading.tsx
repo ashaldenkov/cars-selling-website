@@ -1,8 +1,8 @@
-import Breadcrumbs from "@/app/_components/sharedComponents/Breadcrumbs"
-import AdsBanner from '@/app/_components/sharedComponents/Ads'
-import InsuranceHistoryLoading from "@/app/_components/detailsPage/Insurance-history-loading";
-import Calculator from "@/app/_components/detailsPage/Calculator";
-import DetailsModalButtons from '@/app/_components/detailsPage/Details-modal-buttons'
+import Breadcrumbs from "@/app/_components/sharedComponents/breadcrumbs"
+import AdsBanner from '@/app/_components/sharedComponents/ads'
+import InsuranceHistoryLoading from "@/app/_components/detailsPage/insurance-history-loading";
+import Calculator from "@/app/_components/detailsPage/calculator";
+import DetailsModalButtons from '@/app/_components/detailsPage/details-modal-buttons'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'

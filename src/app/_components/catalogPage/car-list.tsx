@@ -1,5 +1,5 @@
 import React from 'react'
-import CarCard from "@/app/_components/catalogPage/Car-card"
+import CarCard from "@/app/_components/catalogPage/car-card"
 
 
 interface CarList {

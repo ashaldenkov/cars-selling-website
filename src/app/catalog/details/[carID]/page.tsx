@@ -3,13 +3,13 @@ import { format } from "date-fns";
 import { ru } from 'date-fns/locale'
 import { Suspense } from 'react'
 
-import DetailsModalInfo from "@/app/_components/detailsPage/Details-modal-info"
-import Breadcrumbs from "@/app/_components/sharedComponents/Breadcrumbs"
-import AdsBanner from '@/app/_components/sharedComponents/Ads'
-import InsuranceHistory from "@/app/_components/detailsPage/Insurance-history";
-import Calculator from "@/app/_components/detailsPage/Calculator";
-import LoadingCalc from "@/app/_components/LoadingVersionPages/Loading-calculator";
-import ImageCarousel from "@/app/_components/detailsPage/Image-carousel";
+import DetailsModalInfo from "@/app/_components/detailsPage/details-modal-info"
+import Breadcrumbs from "@/app/_components/sharedComponents/breadcrumbs"
+import AdsBanner from '@/app/_components/sharedComponents/ads'
+import InsuranceHistory from "@/app/_components/detailsPage/insurance-history";
+import Calculator from "@/app/_components/detailsPage/calculator";
+import LoadingCalc from "@/app/_components/LoadingVersionPages/loading-calculator";
+import ImageCarousel from "@/app/_components/detailsPage/image-carousel";
 
 async function getSomething() {  
     await new Promise(resolve => setTimeout(resolve, 5000))

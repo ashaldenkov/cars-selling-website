@@ -1,10 +1,10 @@
-import ContacsUs from "@/app/_components/sharedComponents/Contacs-us"
-import AdsBanner from '@/app/_components/sharedComponents/Ads'
-import PaginationComponent from '@/app/_components/catalogPage/Pagination'
-import Breadcrumbs from "@/app/_components/sharedComponents/Breadcrumbs"
-import Filter from "@/app/_components/catalogPage/Filter"
-import CarList from "@/app/_components/catalogPage/Car-list"
-import NotFoundCatalog from "@/app/_components/LoadingVersionPages/Not-found-catalog"
+import ContacsUs from "@/app/_components/sharedComponents/contacs-us"
+import AdsBanner from '@/app/_components/sharedComponents/ads'
+import PaginationComponent from '@/app/_components/catalogPage/pagination'
+import Breadcrumbs from "@/app/_components/sharedComponents/breadcrumbs"
+import Filter from "@/app/_components/catalogPage/filter"
+import CarList from "@/app/_components/catalogPage/car-list"
+import NotFoundCatalog from "@/app/_components/LoadingVersionPages/not-found-catalog"
 
 //imitating loading data
 async function getSomething() {  

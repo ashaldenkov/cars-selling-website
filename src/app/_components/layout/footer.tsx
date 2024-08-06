@@ -9,7 +9,7 @@ import Link from 'next/link'
 import LogoWhite from '@/app/_images/logo_white.png'
 
 //icons group
-import Socials from './Socials'
+import Socials from './socials'
 
 const Footer = () => {
   return (

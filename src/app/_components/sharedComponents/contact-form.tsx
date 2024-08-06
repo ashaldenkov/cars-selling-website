@@ -1,6 +1,6 @@
 'use client'
 import { useForm, SubmitHandler } from "react-hook-form"
-import ContactModal from './Contact-modal'
+import ContactModal from './contact-modal'
 import { useState } from "react"
 
   interface ContactValues {

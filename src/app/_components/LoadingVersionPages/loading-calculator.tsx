@@ -1,20 +1,12 @@
 import Image from 'next/image'
 import Checkbox  from '@/app/_images/priceCheckbox.svg'
-import CalculatorForm from './Calculator-form'
+import CalculatorForm from '../detailsPage/calculator-form'
 
 interface Calc {
     loading?: boolean;
 }
 
-async function getSomething() {  
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    const res = await fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    return res
-  }
-
-async function  Calculator ({loading}: Calc) {
-    const list2 = await getSomething()
+const LoadingCalc = ({loading}: Calc) => {
 
   return (
     <div className='max-lg:px-4 mb-10 max-lg:mb-8' id='calculator'>
@@ -221,4 +213,4 @@ async function  Calculator ({loading}: Calc) {
   )
 }
 
-export default Calculator
+export default LoadingCalc

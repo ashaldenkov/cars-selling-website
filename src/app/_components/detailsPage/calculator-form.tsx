@@ -1,5 +1,5 @@
 'use client'
-import CustomSelect from '../sharedComponents/Custom-select'
+import CustomSelect from '../sharedComponents/custom-select'
 import { useState } from 'react'
 import { useForm, SubmitHandler, Controller  } from "react-hook-form"
 

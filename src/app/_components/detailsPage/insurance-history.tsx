@@ -8,7 +8,7 @@ import Damaged  from '@/app/_images/InsuranceIcons/damaged.png'
 import Dislocation  from '@/app/_images/InsuranceIcons/dislocation.png'
 import Repaired  from '@/app/_images/InsuranceIcons/repaired.png'
 import Scratches  from '@/app/_images/InsuranceIcons/scratches.png'
-import FullInsuranceModal from './Full-insurance-modal'
+import FullInsuranceModal from './full-insurance-modal'
 
 
 

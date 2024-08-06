@@ -1,8 +1,8 @@
 import React from 'react'
-import Filter from "@/app/_components/catalogPage/Filter"
-import AdsBanner from '@/app/_components/sharedComponents/Ads'
-import Breadcrumbs from "@/app/_components/sharedComponents/Breadcrumbs"
-import ContacsUs from "@/app/_components/sharedComponents/Contacs-us"
+import Filter from "@/app/_components/catalogPage/filter"
+import AdsBanner from '@/app/_components/sharedComponents/ads'
+import Breadcrumbs from "@/app/_components/sharedComponents/breadcrumbs"
+import ContacsUs from "@/app/_components/sharedComponents/contacs-us"
 
 const LoadingCatalog = () => {
   return (
