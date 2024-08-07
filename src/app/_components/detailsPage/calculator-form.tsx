@@ -1,106 +1,35 @@
 'use client'
 import CustomSelect from '../sharedComponents/custom-select'
 import { useState } from 'react'
-import { useForm, SubmitHandler, Controller  } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
-const destinationOptions = [
-    {
-      label: "Без доставки",
-      value: "none"
-    },
-    {
-      label: "Москва",
-      value: "moscow"
-    }
-  ]
-const engineTypeOptions = [
-    {
-      label: "ДВС",
-      value: "ice"
-    },
-    {
-      label: "Электро",
-      value: "electro"
-    }
-  ]
-const ageOptions = [
-    {
-      label: "Младше 3-х лет",
-      value: "<3"
-    },
-    {
-      label: "От 3 до 5 лет",
-      value: "3-5"
-    },
-    {
-      label: "Старше 5 лет",
-      value: ">5"
-    }
-  ]
-const engineCapacityOptions = [
-    {
-      label: "1.0 л",
-      value: "1.0"
-    },
-    {
-        label: "1.2 л",
-        value: "1.2"
-      },
-      {
-        label: "1.5 л",
-        value: "1.5"
-      },
-      {
-        label: "1.6 л",
-        value: "1.6"
-      },
-      {
-        label: "2.0 л",
-        value: "2.0"
-      },
-      {
-        label: "2.2 л",
-        value: "2.2"
-      },
-      {
-        label: "2.5 л",
-        value: "2.5"
-      },
-      {
-        label: "3.0 л",
-        value: "3.0"
-      },
-      {
-        label: "3.3 л",
-        value: "3.3"
-      },
-      {
-        label: "3.5 л",
-        value: "3.5"
-      },
-      {
-        label: "3.8 л",
-        value: "3.8"
-      },
-  ]
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-  interface CalculatorValues {
-    destination: any;
-    price: number;
-    engineType: string;
-    age: string;
-    engineCapacity: string;
-  }
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+
   
-  const debounce = (callback:any, wait:number) => {
-    let timeoutId: any = null;
-    return (...args:any[]) => {
-      window.clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(() => {
-        callback(...args);
-      }, wait);
-    };
-  }
+
   interface CalcForm {
     loading?: boolean;
   }
@@ -116,132 +45,191 @@ const engineCapacityOptions = [
 
 
 const CalculatorForm = ({loading}: CalcForm) => {
-    const [formData, setFormData] = useState<any>({
-        destination: null,
-        engineType: null,
-        age: null,
-        engineCapacity:null
-    }); 
-    const [isEmpty, setIsEmpty] = useState(false)
 
-    const { register, reset, handleSubmit } = useForm<CalculatorValues>()
+  const formSchema = z.object({
+    destination: z.string().min(1, { message: "Обязательное поле" }),
+    price: z.string().min(1, { message: "Обязательное поле" }),
+    engineType: z.string().min(1, { message: "Обязательное поле" }),
+    engineCapacity:z.string().min(1, { message: "Обязательное поле" }),
+    age: z.string().min(1, { message: "Обязательное поле" }),
+  }).required()
 
-    const onSubmit: SubmitHandler<CalculatorValues> = (data: CalculatorValues) => {
-        //validate
-        if (Object.values(formData).includes(null)) {
-            debounce(setIsEmpty(true),1000)
-            setTimeout(() => setIsEmpty(false), 1000)
-        } 
-        //if all good sending
-        else {
-            let result = {...formData}
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      destination: "",
+      price: "",
+      engineType: "",
+      engineCapacity: "",
+      age: "",
+    },
+  })
 
-            //изменяем полученные данные чтобы оставить только нужные параметры
-            Object.keys(result).forEach((key) => {
-                result[key] = result[key]?.value
-            }) 
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
 
-            //объединяем с инпутами формы
-            result = {...result, ...data}
+    // result.priceFrom = result.priceFrom.replace(/\s/g, "")
+    // result.priceTo = result.priceTo.replace(/\s/g, "")
+    console.log(values)
+  }
 
-            console.log(result)
-            // setFormData({
-            //     destination: null,
-            //     engineType: null,
-            //     age: null,
-            //     engineCapacity:null
-            //     })
-            // reset()
-        }
-      }
       
   return (
-    
-    <form className='text-med text-price' onSubmit={handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} onReset={() => form.reset()} className="text-med text-price">
 
-        <div className='mb-5'>
-            <p className='pb-2.5'>Конечный пункт доставки</p>
-            <div className={`rounded-md h-[42px] ${(formData.destination?.value || !isEmpty) ? '' : 'border-2 border-slate-900'}`}>
-            <CustomSelect 
-                name='destination' 
-                data={formData} 
-                setData={setFormData} 
-                options={destinationOptions} 
-                form='full' 
-                placeHolder="Выбрать..." 
-                dropdownLabel="Пункт доставки"
-            />
-            </div>
-        </div>
-        <div>
-            <p className='pb-2.5'>Стоимость автомобиля, ₩ (в корейских вонах)</p>
-            <input
-                {...register("price", loading ? { disabled: true} : { required: true })} 
-                id="price"
-                onChange={spaces}
-                placeholder='Введите'
-                className='mb-5 h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
+              <FormField
+                control={form.control}
+                name="destination"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-5">
+                    <FormLabel className='text-[15px] font-normal'>Конечный пункт доставки</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выбрать..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Пункт доставки</SelectLabel>
+                          <SelectItem value="no">Без доставки</SelectItem>
+                          <SelectItem value="moscow">Москва</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-        </div>
-        <div className='mb-5'>
-            <p className='pb-2.5'>Тип двигателя</p>
-            <div className={`rounded-md h-[42px] ${(formData.engineType?.value || !isEmpty) ? '' : 'border-2 border-slate-900'}`}>
-                <CustomSelect 
-                    name='engineType' 
-                    data={formData} 
-                    setData={setFormData} 
-                    options={engineTypeOptions} 
-                    form='full' 
-                    placeHolder="Выбрать..." 
-                    dropdownLabel="Тип двигателя"
-                />
-            </div>
-        </div>
-        <div className='mb-5'>
-            <p className='pb-2.5'>Объем двигателя</p>
-            <div className={`rounded-md h-[42px] ${(formData.engineCapacity?.value || !isEmpty) ? '' : 'border-2 border-slate-900'}`}>
-                <CustomSelect 
-                    name='engineCapacity' 
-                    data={formData} 
-                    setData={setFormData} 
-                    options={engineCapacityOptions} 
-                    form='full' 
-                    placeHolder="Выбрать..." 
-                    dropdownLabel="Объем двигателя"
-                />
-            </div>
-        </div>
-        <div className='pb-5'>
-            <p className='pb-2.5'>Возраст автомобиля</p>
-            <div className={`rounded-md h-[42px] ${(formData.age?.value || !isEmpty) ? '' : 'border-2 border-slate-900'}`}>
-                <CustomSelect 
-                    name='age' 
-                    data={formData} 
-                    setData={setFormData} 
-                    options={ageOptions} 
-                    form='full' 
-                    placeHolder="Выбрать..." 
-                    dropdownLabel="Возраст авто"
-                />
-            </div>
-        </div>
-        {loading ? (
-        <div className='shrink-0 flex items-center justify-center h-10 mt-4 mb-8 mx-auto w-fit px-4 rounded-md text-white bg-loading'>
-              <svg aria-hidden="true" className="w-4 h-4 mr-1 text-gray-200 animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-              </svg>
-          Загрузка...
-        </div>
-        ) : (
-              <button
-                type="submit"
-                className='block h-10 w-3/4 max-w-[250px] mx-auto mt-4 mb-8 rounded-md text-white bg-slate-900 duration-500 hover:bg-slate-700'>
-                    Рассчитать стоимость
-              </button>
-        )}
 
-    </form>
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-5">
+                    <FormLabel className='text-[15px] font-normal'>Стоимость автомобиля, ₩ (в корейских вонах)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Введите" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="placeholder:text-slate-400"/>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="engineType"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-5">
+                    <FormLabel className='text-[15px] font-normal'>Тип двигателя</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выбрать..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Тип двигателя</SelectLabel>
+                          <SelectItem value="ice">ДВС</SelectItem>
+                          <SelectItem value="electro">Электро</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="engineCapacity"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-5">
+                    <FormLabel className='text-[15px] font-normal'>Объем двигателя</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выбрать..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Объем двигателя</SelectLabel>
+                          <SelectItem value="1000">1000 см<sup>3</sup></SelectItem>
+                          <SelectItem value="1200">1200 см<sup>3</sup></SelectItem>
+                          <SelectItem value="1500">1500 см<sup>3</sup></SelectItem>
+                          <SelectItem value="1600">1600 см<sup>3</sup></SelectItem>
+                          <SelectItem value="2000">2000 см<sup>3</sup></SelectItem>
+                          <SelectItem value="2200">2200 см<sup>3</sup></SelectItem>
+                          <SelectItem value="2500">2500 см<sup>3</sup></SelectItem>
+                          <SelectItem value="3000">3000 см<sup>3</sup></SelectItem>
+                          <SelectItem value="3300">3300 см<sup>3</sup></SelectItem>
+                          <SelectItem value="3500">3500 см<sup>3</sup></SelectItem>
+                          <SelectItem value="3800">3800 см<sup>3</sup></SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="age"
+                render={({ field }) => (
+                  <FormItem className="w-full pb-5">
+                    <FormLabel className='text-[15px] font-normal'>Возраст автомобиля</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выбрать..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Возраст авто</SelectLabel>
+                          <SelectItem value="<3">Младше 3-х лет</SelectItem>
+                          <SelectItem value="3-5">От 3 до 5 лет</SelectItem>
+                          <SelectItem value=">5">Старше 5 лет</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+          {loading ? (
+            <Button disabled className='block flex w-auto mx-auto mt-4 mb-8 text-white'>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Загрузка...
+            </Button>
+          ) : (
+                <Button
+                  type="submit"
+                  className='block w-3/4 max-w-[250px] mx-auto mt-4 mb-8 text-white bg-slate-900 duration-500 hover:bg-slate-700'>
+                      Рассчитать стоимость
+                </Button>
+          )}
+
+      </form>
+    </Form>
   )
 }
 

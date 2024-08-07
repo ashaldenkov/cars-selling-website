@@ -16,6 +16,7 @@ async function getSomething() {
   return res
 }
 
+
 export default async function Details() {
   const list2 = await getSomething()
     return (

@@ -1,20 +1,66 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model available_attributes {
+  id                                          Int                    @id(map: "available_attributes_pk") @default(autoincrement())
+  title                                       String                 @db.Char(255)
+  att_type                                    attribute_type         @default(ATTRIBUTE)
+  parent_att                                  Int?
+  description                                 String?
+  last_update                                 DateTime?              @default(now()) @db.Timestamp(6)
+  available_attributes                        available_attributes?  @relation("available_attributesToavailable_attributes", fields: [parent_att], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  other_available_attributes                  available_attributes[] @relation("available_attributesToavailable_attributes")
+  car_car_brand_idToavailable_attributes      car[]                  @relation("car_brand_idToavailable_attributes")
+  car_car_generation_idToavailable_attributes car[]                  @relation("car_generation_idToavailable_attributes")
+  car_car_model_idToavailable_attributes      car[]                  @relation("car_model_idToavailable_attributes")
+  car_attributes                              car_attributes[]
 
-    @@index([name])
+  @@unique([title, att_type], map: "unique_title_att_type")
+}
+
+model car {
+  id                                                           Int                   @id @default(autoincrement())
+  title                                                        String                @db.Char(500)
+  color                                                        String?               @db.Char(255)
+  car_mileage                                                  Int?
+  price                                                        Int?
+  production_year                                              Int?
+  images                                                       String[]
+  engine_capacity                                              Int?
+  engine_power                                                 Int?
+  engine_type                                                  String?               @db.Char(255)
+  car_drive                                                    String?               @db.Char(255)
+  car_number                                                   String?               @db.Char(255)
+  brand_id                                                     Int?
+  model_id                                                     Int?
+  generation_id                                                Int?
+  visible                                                      Boolean               @default(true)
+  last_update                                                  DateTime?             @default(now()) @db.Timestamp(6)
+  available_attributes_car_brand_idToavailable_attributes      available_attributes? @relation("car_brand_idToavailable_attributes", fields: [brand_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  available_attributes_car_generation_idToavailable_attributes available_attributes? @relation("car_generation_idToavailable_attributes", fields: [generation_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  available_attributes_car_model_idToavailable_attributes      available_attributes? @relation("car_model_idToavailable_attributes", fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  car_attributes                                               car_attributes[]
+}
+
+model car_attributes {
+  attribute_id         Int
+  car_id               Int
+  value                String
+  available_attributes available_attributes @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  car                  car                  @relation(fields: [car_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([attribute_id, car_id], map: "cat_attribute_pk")
+}
+
+enum attribute_type {
+  BRAND
+  MODEL
+  GENERATION
+  ATTRIBUTE
 }

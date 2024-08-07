@@ -1,15 +1,31 @@
 'use client'
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useState  } from "react"
-import CustomSelect from "@/app/_components/sharedComponents/custom-select"
 
-  interface FilterValues {
-    priceFrom: string;
-    priceTo: string;
-    carNumber: string;
-    mileageFrom: string;
-    mileageTo: string;
-  }
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+
 
   interface Filter {
     loading?: true;
@@ -22,507 +38,565 @@ import CustomSelect from "@/app/_components/sharedComponents/custom-select"
             <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
     );
-};
+  };
 
 const Filter = ({loading, notFound}:Filter) => {
 
-  const carBrandOptions = [
-    {
-      label: "Hyundai",
-      value: "hyundai"
-    },
-    {
-      label: "Audi",
-      value: "audi"
-    },
-    {
-      label: "BMW",
-      value: "bmw"
-    },
-    {
-      label: "Kia",
-      value: "kia"
-    },
-    {
-      label: "Toyota",
-      value: "toyota"
-    },
-  ]
-  const carModelOptions = [
-    {
-      label: "К4",
-      value: "k4"
-    },
-    {
-      label: "К5",
-      value: "k5"
-    },
-    {
-      label: "К6",
-      value: "k6"
-    },
-    {
-      label: "К7",
-      value: "k7"
-    },
-    {
-      label: "К8",
-      value: "k8"
-    },
-  ]
-  const yearFromOptions = [
-    {
-      label: "2024",
-      value: "2024"
-    },
-    {
-      label: "2023",
-      value: "2023"
-    },
-    {
-      label: "2022",
-      value: "2022"
-    },
-    {
-      label: "2021",
-      value: "2021"
-    },
-    {
-      label: "2020",
-      value: "2020"
-    },
-  ]
-  const yearToOptions = [
-    {
-      label: "2024",
-      value: "2024"
-    },
-    {
-      label: "2023",
-      value: "2023"
-    },
-    {
-      label: "2022",
-      value: "2022"
-    },
-    {
-      label: "2021",
-      value: "2021"
-    },
-    {
-      label: "2020",
-      value: "2020"
-    },
-  ]
-  const engineCapacityFromOptions = [
-    {
-      label: "0.7 л",
-      value: "0.7"
-    },
-    {
-      label: "0.8 л",
-      value: "0.8"
-    },
-    {
-      label: "0.9 л",
-      value: "0.9"
-    },
-    {
-      label: "1.0 л",
-      value: "1.0"
-    },
-    {
-      label: "1.1 л",
-      value: "1.1"
-    },
-  ]
-  const engineCapacityToOptions = [
-    {
-      label: "0.7 л",
-      value: "0.7"
-    },
-    {
-      label: "0.8 л",
-      value: "0.8"
-    },
-    {
-      label: "0.9 л",
-      value: "0.9"
-    },
-    {
-      label: "1.0 л",
-      value: "1.0"
-    },
-    {
-      label: "1.1 л",
-      value: "1.1"
-    },
-  ]
-  const generationOptions = [
-    {
-      label: "The New K5 Hybrid (23-24) The New K5 Hybrid (2023)",
-      value: "1"
-    },
-    {
-      label: "The New K5 Hybrid (20-23)",
-      value: "2"
-    },
-    {
-      label: "New K5 (13-15)",
-      value: "3"
-    },
-    {
-      label: "New K5 Hybrid (13-15)",
-      value: "4"
-    },
-    {
-      label: "K5 (09-10)",
-      value: "5"
-    },
-  ]
-  const enginePowerOptions = [
-    {
-      label: "50",
-      value: "50"
-    },
-    {
-      label: "75",
-      value: "75"
-    },
-    {
-      label: "100",
-      value: "100"
-    },
-    {
-      label: "125",
-      value: "125"
-    },
-    {
-      label: "150",
-      value: "150"
-    },
-  ]
-  const engineTypeOptions = [
-    {
-      label: "ДВС",
-      value: "ice"
-    },
-    {
-      label: "Электро",
-      value: "electro"
-    }
-  ]
-  const transmissionOptions = [
-    {
-      label: "Любой",
-      value: "any"
-    },
-    {
-      label: "Передний",
-      value: "front"
-    },
-    {
-      label: "Задний",
-      value: "rear"
-    }
-  ]
-  const colorOptions = [
-    {
-      label: "Любой",
-      value: "any"
-    },
-    {
-      label: "Белый",
-      value: "white"
-    },
-    {
-      label: "Черный",
-      value: "black"
-    },
-    {
-      label: "Серый",
-      value: "gray"
-    },
-    {
-      label: "Бежевый",
-      value: "beige"
-    },
-  ]
-
   const [filterExtended, setFilterExtended] = useState(false); 
-  const [formData, setFormData] = useState<any>({
-    carBrand: null,
-    carModel: null,
-    yearFrom: null,
-    yearTo:null,
-    engineCapacityFrom: null,
-    engineCapacityTo: null,
-    generation: null,
-    enginePower:null,
-    engineType: null,
-    transmission: null,
-    color: null,
-}); 
 
-const spaces = (e:any) => {
-  if (e.target.value) {
-    if (parseInt(e.target.value)) {
-      e.target.value = e.target.value.replace(/\s/g, "")
-      e.target.value = parseInt(e.target.value).toLocaleString('ru-Ru')
+  //creates spaces when we enter price and coverts it back to string
+  const spaces = (e:any) => {
+    if (e.target.value) {
+      if (parseInt(e.target.value)) {
+        e.target.value = e.target.value.replace(/\s/g, "")
+        e.target.value = parseInt(e.target.value).toLocaleString('ru-Ru')
+      }
+      else e.target.value = e.target.value.slice(0,-1)
     }
-    else e.target.value = e.target.value.slice(0,-1)
-  }
-}
-
-  const { register, reset, handleSubmit } = useForm<FilterValues>()
-
-  const onSubmit: SubmitHandler<FilterValues> = (data) => {
-
-    let result = {...formData}
-    //изменяем полученные данные чтобы оставить только нужные параметры
-    Object.keys(result).forEach(function(key) {
-        result[key] = result[key]?.value
-    }) 
-    //объединяем с инпутами формы
-    result = {...result, ...data}
-    result.priceFrom = result.priceFrom.replace(/\s/g, "")
-    result.priceTo = result.priceTo.replace(/\s/g, "")
-    console.log(result)
   }
 
-  const handleReset = () => {
-    reset()
-    setFormData({
-      carBrand: null,
-      carModel: null,
-      yearFrom: null,
-      yearTo:null,
-      engineCapacityFrom: null,
-      engineCapacityTo: null,
-      generation: null,
-      enginePower:null,
-      engineType: null,
-      transmission: null,
-      color: null,
-    })
+  const formSchema = z.object({
+    carBrand: z.string(),
+    carModel: z.string(),
+    yearFrom: z.string(),
+    yearTo:z.string(),
+    priceFrom: z.string(),
+    priceTo: z.string(),
+    engineCapacityFrom: z.string(),
+    engineCapacityTo: z.string(),
+    generation: z.string(),
+    enginePower:z.string(),
+    engineType: z.string(),
+    transmission: z.string(),
+    color: z.string(),
+    carNumber: z.string(),
+    mileageFrom: z.string(),
+    mileageTo: z.string(),
+    generationOptions: z.string()
+  }).refine((obj) => {
+    let tempPrice1 = parseInt(obj.priceFrom.replace(/\s/g, ""))
+    let tempPrice2 = parseInt(obj.priceTo.replace(/\s/g, ""))
+    return (!obj.priceFrom || !obj.priceTo || tempPrice1 <= tempPrice2)
+  }
+    , { message: `Введенная цена меньше начальной цены поиска`,
+      path: ["priceTo"]
+  }).refine((obj) => {
+    let tempMiles1 = parseInt(obj.mileageFrom.replace(/\s/g, ""))
+    let tempMiles2 = parseInt(obj.mileageTo.replace(/\s/g, ""))
+    return (!obj.mileageFrom || !obj.mileageTo || tempMiles1 <= tempMiles2)
+  }
+    , { message: `Максимальный пробег должен быть меньше начального`,
+      path: ["mileageTo"]
+  })
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    reValidateMode: "onChange",
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      carBrand: "",
+      carModel: "",
+      yearFrom: "",
+      yearTo: "",
+      priceFrom: "",
+      priceTo: "",
+      engineCapacityFrom: "",
+      engineCapacityTo: "",
+      generation: "",
+      enginePower:"",
+      engineType: "",
+      transmission: "",
+      color: "",
+      carNumber: "",
+      mileageFrom: "",
+      mileageTo: "",
+      generationOptions: "",
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+
+    // result.priceFrom = result.priceFrom.replace(/\s/g, "")
+    // result.priceTo = result.priceTo.replace(/\s/g, "")
+    console.log(values)
   }
 
   const handleExtendClick = () => {
     setFilterExtended(!filterExtended)
   }
+
   return (
-    <div className='bg-slate-50 w-full px-4 py-5 min-[720px]:px-[30px] min-[720px]:px-[30px] min-[720px]:py-[30px]'>
-      <form className='' onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full">
+
+      <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} onReset={() => form.reset()} className="bg-slate-50 w-full px-4 py-5 min-[720px]:px-[30px] min-[720px]:px-[30px] min-[720px]:py-[30px]">
+        <div className="w-full mb-[20px] lg:mb-[30px]">
           <div className="min-[720px]:flex min-[720px]:justify-between">
-            <div className="mb-3 min-[720px]:mr-3 min-[720px]:w-1/2">
-              <CustomSelect 
-                name='carBrand'
-                data={formData} 
-                setData={setFormData} 
-                options={carBrandOptions} 
-                form='full' 
-                placeHolder="Марка" 
-                dropdownLabel="Марка"
-              />
-            </div>
-            <div className="mb-3 min-[720px]:w-1/2">
-              <CustomSelect 
-                name='carModel'
-                data={formData} 
-                setData={setFormData} 
-                options={carModelOptions} 
-                form='full' 
-                placeHolder="Модель" 
-                dropdownLabel="Модель"
-              />
-            </div>
+            <FormField
+            control={form.control}
+            name="carBrand"
+            render={({ field }) => (
+              <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px] min-[720px]:mr-3">
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Марка" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="overflow-y-auto w-[212px]">
+                  <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                    <SelectGroup className="w-[200px]">
+                      <SelectLabel>Марка</SelectLabel>
+                      <SelectItem value="hyundai">Hyundai</SelectItem>
+                      <SelectItem value="audi">Audi</SelectItem>
+                      <SelectItem value="bmw">BMW</SelectItem>
+                      <SelectItem value="kia">Kia</SelectItem>
+                      <SelectItem value="toyota">Toyota</SelectItem>
+                    </SelectGroup>
+                    <ScrollBar orientation="vertical"/>
+                  </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="carModel"
+            render={({ field }) => (
+              <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px]">
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Модель" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="overflow-y-auto w-[212px]">
+                    <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                      <SelectGroup className="w-[200px]">
+                      <SelectLabel>Модель</SelectLabel>
+                      <SelectItem value="k4">K4</SelectItem>
+                      <SelectItem value="k5">K5</SelectItem>
+                      <SelectItem value="k6">K6</SelectItem>
+                      <SelectItem value="k7">K7</SelectItem>
+                      <SelectItem value="k8">K8</SelectItem>
+                      </SelectGroup>
+                      <ScrollBar orientation="vertical"/>
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+            />
           </div>
 
           <div className="flex max-[720px]:flex-col">
-            <div className="mb-3 flex w-full min-[720px]:w-1/2 min-[720px]:pr-[6px]">
-              <CustomSelect
-                name='yearFrom' 
-                data={formData} 
-                setData={setFormData} 
-                options={yearFromOptions} 
-                form='half-left' 
-                placeHolder="Год, от" 
-                dropdownLabel="Год выпуска"
+            <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pr-[6px]">
+              <FormField
+              control={form.control}
+              name="yearFrom"
+              render={({ field }) => (
+                <FormItem className="w-full mb-3 min-[720px]:w-1/2 min-[720px]:max-w-[324px]">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='rounded-r-none data-[placeholder]:text-slate-400'>
+                        <SelectValue placeholder="Год, от" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                        <SelectLabel>Год выпуска</SelectLabel>
+                        <SelectItem value="2024">2024</SelectItem>
+                        <SelectItem value="2023">2023</SelectItem>
+                        <SelectItem value="2022">2022</SelectItem>
+                        <SelectItem value="2021">2021</SelectItem>
+                        <SelectItem value="2020">2020</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+              )}
               />
-              <CustomSelect 
-                name='yearTo'
-                data={formData} 
-                setData={setFormData} 
-                options={yearToOptions} 
-                form='half-right' 
-                placeHolder="до" 
-                dropdownLabel="Год выпуска"
+              <FormField
+              control={form.control}
+              name="yearTo"
+              render={({ field }) => (
+                <FormItem className="w-full mb-3 min-[720px]:w-1/2 min-[720px]:max-w-[324px]">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='rounded-l-none data-[placeholder]:text-slate-400'>
+                        <SelectValue placeholder="до" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Год выпуска</SelectLabel>
+                          <SelectItem value="2024">2024</SelectItem>
+                          <SelectItem value="2023">2023</SelectItem>
+                          <SelectItem value="2022">2022</SelectItem>
+                          <SelectItem value="2021">2021</SelectItem>
+                          <SelectItem value="2020">2020</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+              )}
               />
             </div>
-            <div className="mb-3 flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] max-[720px]:hidden">
-                <CustomSelect
-                  name='engineCapacityFrom' 
-                  data={formData} 
-                  setData={setFormData} 
-                  options={engineCapacityFromOptions} 
-                  form='half-left' 
-                  placeHolder="Объем" 
-                  dropdownLabel="Объем двигателя"
-                />
-                <CustomSelect 
-                  name='engineCapacityTo'
-                  data={formData} 
-                  setData={setFormData} 
-                  options={engineCapacityToOptions} 
-                  form='half-right' 
-                  placeHolder="до" 
-                  dropdownLabel="Объем двигателя"
-                />
+            <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] max-[720px]:hidden">
+              <FormField
+              control={form.control}
+              name="engineCapacityFrom"
+              render={({ field }) => (
+                <FormItem className="w-full mb-3 min-[720px]:w-1/2 min-[720px]:max-w-[324px]">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='rounded-r-none data-[placeholder]:text-slate-400'>
+                        <SelectValue placeholder="Объем, от"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Объем двигателя</SelectLabel>
+                          <SelectItem value="0.7">0.7 л</SelectItem>
+                          <SelectItem value="0.8">0.8 л</SelectItem>
+                          <SelectItem value="0.9">0.9 л</SelectItem>
+                          <SelectItem value="1.0">1.0 л</SelectItem>
+                          <SelectItem value="1.1">1.1 л</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+              )}
+              />
+              <FormField
+              control={form.control}
+              name="engineCapacityTo"
+              render={({ field }) => (
+                <FormItem className="w-full mb-3 min-[720px]:w-1/2 min-[720px]:max-w-[324px]">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='rounded-l-none data-[placeholder]:text-slate-400'>
+                        <SelectValue placeholder="до"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                      <SelectLabel>Объем двигателя</SelectLabel>
+                      <SelectItem value="0.7">0.7 л</SelectItem>
+                      <SelectItem value="0.8">0.8 л</SelectItem>
+                      <SelectItem value="0.9">0.9 л</SelectItem>
+                      <SelectItem value="1.0">1.0 л</SelectItem>
+                      <SelectItem value="1.1">1.1 л</SelectItem>
+                      </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+              )}
+              />
             </div>
           </div>
 
           <div className="flex">
             <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pr-[6px]">
-              <input
-                {...register("priceFrom", loading ? {  disabled: true} : {})} 
-                id="priceFrom"
-                onChange={spaces}
-                placeholder='Цена от, ₩'
-                className='mb-[30px] focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-l-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
+              <FormField
+                control={form.control}
+                name="priceFrom"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input placeholder="Цена от, ₩" {...field} onChange={(e) => {spaces(e); field.onChange(e)}}  className="rounded-r-none placeholder:text-slate-400"/>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <input
-                {...register("priceTo", loading ? {  disabled: true} : {})} 
-                id="priceTo"
-                onChange={spaces}
-                placeholder='до'
-                className='mb-[30px] focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-r-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
+              <FormField
+                control={form.control}
+                name="priceTo"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input placeholder="до" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-l-none placeholder:text-slate-400"/>
+                    </FormControl>
+                    <FormMessage className="text-sm"/>
+                  </FormItem>
+                )}
               />
             </div>
             <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] max-[720px]:hidden">
-              <input
-                  {...register("carNumber", loading ? {  disabled: true} : {})} 
-                  className='mb-3 h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm max-[720px]:hidden disabled:bg-white'
-                  id="carNumber"
-                  type="text"
-                  placeholder='Номер машины'
-                />
+              <FormField
+              control={form.control}
+              name="carNumber"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input placeholder="Номер машины" {...field} className="placeholder:text-slate-400"/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              />
             </div>
           </div>
         </div> 
 
-      { filterExtended && (
-        <div className="w-full">
-          <div className="min-[720px]:flex min-[720px]:justify-between">
-            <div className="mb-3 min-[720px]:mr-3 min-[720px]:w-1/2">
-              <CustomSelect 
-                name='generation'
-                data={formData} 
-                setData={setFormData} 
-                options={generationOptions} 
-                form='full' 
-                placeHolder="Поколение" 
-                dropdownLabel="Поколение"
-              />
-            </div>
-            <div className="mb-3 flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] min-[720px]:hidden">
-                <CustomSelect
-                  name='engineCapacityFrom' 
-                  data={formData} 
-                  setData={setFormData} 
-                  options={engineCapacityFromOptions} 
-                  form='half-left' 
-                  placeHolder="Объем" 
-                  dropdownLabel="Объем двигателя"
+        { filterExtended && (
+          <div className="w-full mt-[50px] mb-[30px] min-[720px]:mb-[60px]">
+            <div className="min-[720px]:flex min-[720px]:justify-between">
+            <FormField
+                control={form.control}
+                name="generationOptions"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px] min-[720px]:mr-3">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Поколение" />
+                        </SelectTrigger>
+                        </FormControl>
+                    <SelectContent className="w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Поколение</SelectLabel>
+                          <SelectItem value="1">The New K5 Hybrid (23-24) The New K5 Hybrid (2023)</SelectItem>
+                          <SelectItem value="2">The New K5 Hybrid (20-23)</SelectItem>
+                          <SelectItem value="3">New K5 (13-15)</SelectItem>
+                          <SelectItem value="4">New K5 Hybrid (13-15)</SelectItem>
+                          <SelectItem value="5">K5 (09-10)</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+                )}
                 />
-                <CustomSelect 
-                  name='engineCapacityTo'
-                  data={formData} 
-                  setData={setFormData} 
-                  options={engineCapacityToOptions} 
-                  form='half-right' 
-                  placeHolder="до" 
-                  dropdownLabel="Объем двигателя"
-                />
-            </div>
-            <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pr-[6px]">
-              <input
-                {...register("mileageFrom", loading ? {  disabled: true} : {})} 
-                id="mileageFrom"
-                type="text"
-                placeholder='Пробег от'
-                className='mb-3 focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-l-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
+              <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] min-[720px]:hidden">
+              <FormField
+              control={form.control}
+              name="engineCapacityFrom"
+              render={({ field }) => (
+                <FormItem className="w-full mb-3 min-[720px]:w-1/2 min-[720px]:max-w-[324px]">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='rounded-r-none data-[placeholder]:text-slate-400'>
+                        <SelectValue placeholder="Объем, от"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                          <SelectLabel>Объем двигателя</SelectLabel>
+                          <SelectItem value="0.7">0.7 л</SelectItem>
+                          <SelectItem value="0.8">0.8 л</SelectItem>
+                          <SelectItem value="0.9">0.9 л</SelectItem>
+                          <SelectItem value="1.0">1.0 л</SelectItem>
+                          <SelectItem value="1.1">1.1 л</SelectItem>
+                        </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+              )}
               />
-              <input
-                {...register("mileageTo", loading ? {  disabled: true} : {})} 
-                id="mileageTo"
-                type="text"
-                placeholder='до'
-                className='mb-3 focus:border-slate-900 focus:outline-0 h-10 w-1/2 rounded-r-md border border-slate-200 py-2 px-3 text-sm disabled:bg-white'
+              <FormField
+              control={form.control}
+              name="engineCapacityTo"
+              render={({ field }) => (
+                <FormItem className="w-full mb-3 min-[720px]:w-1/2 min-[720px]:max-w-[324px]">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='rounded-l-none data-[placeholder]:text-slate-400'>
+                        <SelectValue placeholder="до"/>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="overflow-y-auto w-[212px]">
+                      <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                        <SelectGroup className="w-[200px]">
+                      <SelectLabel>Объем двигателя</SelectLabel>
+                      <SelectItem value="0.7">0.7 л</SelectItem>
+                      <SelectItem value="0.8">0.8 л</SelectItem>
+                      <SelectItem value="0.9">0.9 л</SelectItem>
+                      <SelectItem value="1.0">1.0 л</SelectItem>
+                      <SelectItem value="1.1">1.1 л</SelectItem>
+                      </SelectGroup>
+                        <ScrollBar orientation="vertical"/>
+                      </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+              )}
               />
+              </div>
+              <div className="flex w-full min-[720px]:w-1/2">
+              <FormField
+                control={form.control}
+                name="mileageFrom"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-3">
+                    <FormControl>
+                      <Input placeholder="Пробег от" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-r-none placeholder:text-slate-400"/>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="mileageTo"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-3">
+                    <FormControl>
+                      <Input placeholder="до" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-l-none placeholder:text-slate-400"/>
+                    </FormControl>
+                    <FormMessage className="text-sm"/>
+                  </FormItem>
+                )}
+              />
+              </div>
             </div>
-          </div>
 
-          <div className="min-[720px]:flex min-[720px]:justify-between">
-            <div className="mb-3 min-[720px]:mr-3 min-[720px]:w-1/2">
-              <CustomSelect 
-                name='enginePower'
-                data={formData} 
-                setData={setFormData} 
-                options={enginePowerOptions} 
-                form='full' 
-                placeHolder="Мощность" 
-                dropdownLabel="Мощность"
+            <div className="min-[720px]:flex min-[720px]:justify-between">
+              <FormField
+                control={form.control}
+                name="enginePower"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px] min-[720px]:mr-3">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Мощность" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                    <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                      <SelectGroup className="w-[200px]">
+                        <SelectLabel>Мощность</SelectLabel>
+                        <SelectItem value="50">50</SelectItem>
+                        <SelectItem value="75">75</SelectItem>
+                        <SelectItem value="100">100</SelectItem>
+                        <SelectItem value="125">125</SelectItem>
+                        <SelectItem value="150">150</SelectItem>
+                        </SelectGroup>
+                      <ScrollBar orientation="vertical"/>
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="engineType"
+                render={({ field }) => (
+                  <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px]">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Тип двигателя" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                    <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                      <SelectGroup className="w-[200px]">
+                        <SelectLabel>Тип двигателя</SelectLabel>
+                        <SelectItem value="electro">Электро</SelectItem>
+                        <SelectItem value="ice">ДВС</SelectItem>
+                        </SelectGroup>
+                      <ScrollBar orientation="vertical"/>
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+                )}
               />
             </div>
-            <div className="mb-3 min-[720px]:w-1/2">
-              <CustomSelect 
-                name='engineType'
-                data={formData} 
-                setData={setFormData} 
-                options={engineTypeOptions} 
-                form='full' 
-                placeHolder="Тип двигателя" 
-                dropdownLabel="Тип двигателя"
-              />
-            </div>
-          </div>
 
-          <div className="min-[720px]:flex min-[720px]:justify-between">
-            <div className="mb-3 min-[720px]:mb-[30px] min-[720px]:mr-3 min-[720px]:w-1/2">
-              <CustomSelect 
-                name='transmission'
-                data={formData} 
-                setData={setFormData} 
-                options={transmissionOptions} 
-                form='full' 
-                placeHolder="Привод" 
-                dropdownLabel="Привод"
+            <div className="min-[720px]:flex min-[720px]:justify-between">
+              <FormField
+                control={form.control}
+                name="transmission"
+                render={({ field }) => (
+                  <FormItem className="w-full max-[720px]:mb-3 min-[720px]:w-1/2 lg:max-w-[324px] min-[720px]:mr-3">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Привод" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                    <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                      <SelectGroup className="w-[200px]">
+                        <SelectLabel>Привод</SelectLabel>
+                        <SelectItem value="any">Любой</SelectItem>
+                        <SelectItem value="front">Передний</SelectItem>
+                        <SelectItem value="rear">Задний</SelectItem>
+                        </SelectGroup>
+                      <ScrollBar orientation="vertical"/>
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem className="w-full max-[720px]:mb-3 min-[720px]:w-1/2 lg:max-w-[324px]">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Цвет" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="overflow-y-auto w-[212px]">
+                    <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
+                      <SelectGroup className="w-[200px]">
+                        <SelectLabel>Цвет</SelectLabel>
+                        <SelectItem value="any">Любой</SelectItem>
+                        <SelectItem value="white">Белый</SelectItem>
+                        <SelectItem value="black">Черный</SelectItem>
+                        <SelectItem value="grey">Серый</SelectItem>
+                        <SelectItem value="beige">Бежевый</SelectItem>
+                        </SelectGroup>
+                      <ScrollBar orientation="vertical"/>
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="carNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Номер машины" {...field} 
+                      className="w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] min-[720px]:hidden"/>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-            <div className="mb-3 min-[720px]:mb-[30px] min-[720px]:w-1/2">
-              <CustomSelect 
-                name='color'
-                data={formData} 
-                setData={setFormData} 
-                options={colorOptions} 
-                form='full' 
-                placeHolder="Цвет" 
-                dropdownLabel="Цвет"
-              />
-            </div>
-            <div className="flex w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] min-[720px]:hidden">
-              <input
-                  {...register("carNumber", loading ? {  disabled: true} : {})} 
-                  id="carNumber"
-                  type="text"
-                  placeholder='Номер машины'
-                  className='mb-[30px] h-10 w-full rounded-md border border-slate-200 py-2 px-3 text-sm min-[720px]:hidden disabled:bg-white'
-                />
-            </div>
-          </div>
-        </div> 
-      )}
+          </div> 
+        )}
 
         <div className="min-[720px]:mt-[30px] text-sm font-medium min-[720px]:flex">
           <div className="flex w-full max-[720px]:mb-2.5 justify-between min-[720px]:mr-[25px]">
@@ -535,19 +609,16 @@ const spaces = (e:any) => {
               </button>
 
               <button type="reset"
-              className='block h-10 text-slate-900' onClick={handleReset}>
+              className='block h-10 text-slate-900'>
                 Сбросить
               </button>
           </div>
           {
             loading ? (
-              <div className='shrink-0 flex items-center justify-center h-10 w-full min-[720px]:min-w-[130px] min-[720px]:w-fit px-4 rounded-md text-white bg-loading'>
-                    <svg aria-hidden="true" className="w-4 h-4 mr-1 text-gray-200 animate-spin fill-white" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                    </svg>
-                Загрузка...
-              </div>
+              <Button disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Загрузка...
+            </Button>
             ) : (
               notFound ? (
             <div className='shrink-0 flex items-center justify-center h-10 w-full min-[720px]:min-w-[130px] min-[720px]:w-fit px-4 rounded-md text-white bg-loading'>
@@ -565,7 +636,7 @@ const spaces = (e:any) => {
         </div>
 
       </form>
-    </div>
+      </Form>
   )
 }
 
