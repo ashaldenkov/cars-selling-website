@@ -1,6 +1,6 @@
 'use client'
 import { useForm } from "react-hook-form"
-import { useState  } from "react"
+import { useState, useEffect  } from "react"
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,6 +26,9 @@ import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
 
   interface Filter {
     loading?: true;
@@ -43,6 +46,18 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 const Filter = ({loading, notFound}:Filter) => {
 
   const [filterExtended, setFilterExtended] = useState(false); 
+  const [prevData, setPrevData] = useState<any>(null)
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const params = new URLSearchParams(searchParams);
+
+  //clearing parameters on page refresh
+  useEffect( () => {
+    // replace(`${pathname}?${params.get('page').toString()}`)
+  }, [])
 
   //creates spaces when we enter price and coverts it back to string
   const spaces = (e:any) => {
@@ -72,7 +87,6 @@ const Filter = ({loading, notFound}:Filter) => {
     carNumber: z.string(),
     mileageFrom: z.string(),
     mileageTo: z.string(),
-    generationOptions: z.string()
   }).refine((obj) => {
     let tempPrice1 = parseInt(obj.priceFrom.replace(/\s/g, ""))
     let tempPrice2 = parseInt(obj.priceTo.replace(/\s/g, ""))
@@ -109,17 +123,26 @@ const Filter = ({loading, notFound}:Filter) => {
       carNumber: "",
       mileageFrom: "",
       mileageTo: "",
-      generationOptions: "",
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    const result = {...values}
 
-    // result.priceFrom = result.priceFrom.replace(/\s/g, "")
-    // result.priceTo = result.priceTo.replace(/\s/g, "")
-    console.log(values)
+    for (const [key, value] of Object.entries(result)) {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    }
+    setPrevData(values)
+    replace(`${pathname}?${params.toString()}`);
+  }
+  
+  function onReset() {
+    replace(pathname)
+    form.reset()
   }
 
   const handleExtendClick = () => {
@@ -129,7 +152,7 @@ const Filter = ({loading, notFound}:Filter) => {
   return (
 
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} onReset={() => form.reset()} className="bg-slate-50 w-full px-4 py-5 min-[720px]:px-[30px] min-[720px]:px-[30px] min-[720px]:py-[30px]">
+      <form onSubmit={form.handleSubmit(onSubmit)} onReset={onReset} className="bg-slate-50 w-full px-4 py-5 min-[720px]:px-[30px] min-[720px]:px-[30px] min-[720px]:py-[30px]">
         <div className="w-full mb-[20px] lg:mb-[30px]">
           <div className="min-[720px]:flex min-[720px]:justify-between">
             <FormField
@@ -358,7 +381,7 @@ const Filter = ({loading, notFound}:Filter) => {
             <div className="min-[720px]:flex min-[720px]:justify-between">
             <FormField
                 control={form.control}
-                name="generationOptions"
+                name="generation"
                 render={({ field }) => (
                   <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px] min-[720px]:mr-3">
                     <Select onValueChange={field.onChange} value={field.value}>

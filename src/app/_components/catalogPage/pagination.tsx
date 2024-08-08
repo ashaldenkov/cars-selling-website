@@ -2,7 +2,8 @@
 import ReactPaginate from 'react-paginate';
 import useWindowsize from '@/app/hooks/useWindowsize';
 import { useState } from 'react';
-
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function PaginationComponent() {
   const [currPage, setCurrpage] = useState(0)
@@ -11,11 +12,16 @@ export default function PaginationComponent() {
     selected: number;
   }
 
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const params = new URLSearchParams(searchParams);
+
   const handlePageClick = (event: Event) => {
     setCurrpage(event.selected)
-    console.log(
-      `User requested page number ${event.selected + 1}`
-    );
+    params.set('page', (event.selected + 1).toString());
+    replace(`${pathname}?${params.toString()}`);
   };
 
   const size = useWindowsize();
