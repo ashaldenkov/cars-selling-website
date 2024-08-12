@@ -9,10 +9,10 @@ interface CarList {
 export default async function CarList({data}: CarList) {
 
   return (
-    <div>
+    <div className='w-full'>
         {
             data.map((car:any) => {
-                return <CarCard key={car}/>
+                return <CarCard key={car} carData={car}/>
             })
         }
     </div>

@@ -1,19 +1,26 @@
 import { z } from "zod";
 import { db } from '@/server/db';
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "@/server/trpc";
 
 
 
 export const carsRouter = createTRPCRouter({
-  allCarList: publicProcedure
-    .query(async () => {
-      const cars = await db.car.findMany();
-      return cars;
-    }),
+  findCarById: publicProcedure
+  .input(z.string())
+  .query(async (opts) => {
+    const { input } = opts;
+    const car = await db.car.findUnique({
+      where: {
+        id: Number(input),
+      },
+    });
+    return car;
+  }),
 
   getFiltered: publicProcedure
   .input(z.object({
+    page: z.string().optional(),
     carBrand: z.string().optional(),
     carModel: z.string().optional(),
     yearFrom: z.string().optional(),
@@ -36,28 +43,27 @@ export const carsRouter = createTRPCRouter({
     const { input } = opts;
     
     const user = await db.car.findMany({
-      // where: {
-      //   brand_id: Number(input?.carBrand),
-      //   model_id: Number(input.carModel),
-      //   production_year: {gte: Number(input.yearFrom),
-      //     lte: Number(input.yearTo)
-      //   },
-      //   price: {gte: Number(input.priceFrom),
-      //     lte: Number(input.priceTo)
-      //   },
-      //   engine_capacity: {gte: Number(input.engineCapacityFrom),
-      //     lte: Number(input.engineCapacityTo)
-      //   },
-      //   generation_id: Number(input.generation),
-      //   engine_power: Number(input.enginePower),
-      //   engine_type: input.engineType,
-      //   car_drive: input.transmission,
-      //   color: input.color,
-      //   car_number: input.carNumber,
-      //   car_mileage: {gte: Number(input.mileageFrom),
-      //     lte: Number(input.mileageTo)
-      //   },
-      // }
+      where: {
+        brand_id: input.carBrand ? Number(input?.carBrand) : undefined,
+        model_id: input.carModel ? Number(input?.carModel) : undefined,
+        production_year: {gte: input.yearFrom ? Number(input.yearFrom) : undefined,
+          lte: input.yearTo ? Number(input.yearTo) : undefined,
+        },
+        price: {
+        },
+        engine_capacity: {gte: input.engineCapacityFrom ? Number(input.engineCapacityFrom) : undefined,
+          lte: input.engineCapacityTo ? Number(input.engineCapacityTo) : undefined
+        },
+        generation_id: input.generation ? Number(input.generation) : undefined,
+        engine_power: input.enginePower ? Number(input.enginePower) : undefined,
+        engine_type: input.engineType ? input.engineType : undefined,
+        car_drive: (input.transmission && input.transmission !== 'any') ? input.transmission : undefined,
+        color: input.color ? input.color : undefined,
+        car_number: input.carNumber ? { contains: input.carNumber, } : undefined,
+        car_mileage: {gte: input.mileageFrom ? Number(input.mileageFrom) : undefined,
+          lte: input.mileageTo ? Number(input.mileageTo) : undefined,
+        },
+      }
     });
            
     return user;

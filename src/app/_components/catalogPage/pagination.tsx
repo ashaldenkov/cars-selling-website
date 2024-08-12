@@ -1,27 +1,37 @@
 'use client'
 import ReactPaginate from 'react-paginate';
 import useWindowsize from '@/app/hooks/useWindowsize';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
-export default function PaginationComponent() {
-  const [currPage, setCurrpage] = useState(0)
+interface Pagination {
+  maxPages: number,
+  page: number,
+}
+
+
+
+export default function PaginationComponent({maxPages, page}: Pagination) {
+  const [currPage, setCurrpage] = useState(page)
 
   interface Event {
     selected: number;
   }
 
+  useEffect(() => {
+    setCurrpage(page)
+  },[page])
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { push } = useRouter();
 
   const params = new URLSearchParams(searchParams);
 
   const handlePageClick = (event: Event) => {
-    setCurrpage(event.selected)
     params.set('page', (event.selected + 1).toString());
-    replace(`${pathname}?${params.toString()}`);
+    push(`${pathname}?${params.toString()}`);
   };
 
   const size = useWindowsize();
@@ -44,10 +54,11 @@ export default function PaginationComponent() {
             breakLinkClassName={'flex items-center justify-center h-10 border border-slate-100 w-[37px]'}
             breakClassName={`${(currPage > 2 && currPage < 47 && rangeDisplayed == 2) ? '[&:nth-child(3)]:hidden' : '' }`}
             onPageChange={handlePageClick}
-            pageCount={50}
+            pageCount={maxPages}
             pageRangeDisplayed={rangeDisplayed}
             marginPagesDisplayed={1}
-
+            forcePage={page - 1}
+            
             pageLinkClassName={'h-10 px-3 flex items-center '}
             pageClassName={`border border-slate-100 [&:nth-child(2)]:rounded-l-lg [&:nth-last-child(2)]:rounded-r-lg hover:bg-pageActive
               ${(currPage == 1 && rangeDisplayed == 2)? '[&:nth-child(1)]:hidden ' : ''}

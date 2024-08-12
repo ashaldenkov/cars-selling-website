@@ -50,13 +50,19 @@ const Filter = ({loading, notFound}:Filter) => {
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
 
   const params = new URLSearchParams(searchParams);
 
   //clearing parameters on page refresh
   useEffect( () => {
-    // replace(`${pathname}?${params.get('page').toString()}`)
+    
+    for (const [key, value] of params.entries()) {
+      if (key !== 'page') {
+        params.delete(key);
+      } 
+    }
+    replace(`${pathname}?${params.toString()}`);
   }, [])
 
   //creates spaces when we enter price and coverts it back to string
@@ -128,7 +134,10 @@ const Filter = ({loading, notFound}:Filter) => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const result = {...values}
-
+     result.priceFrom = result.priceFrom.replace(/\s/g, "")
+     result.priceTo = result.priceTo.replace(/\s/g, "")
+     result.mileageFrom = result.mileageFrom.replace(/\s/g, "")
+     result.mileageTo = result.mileageTo.replace(/\s/g, "")
     for (const [key, value] of Object.entries(result)) {
       if (value) {
         params.set(key, value);
@@ -136,12 +145,13 @@ const Filter = ({loading, notFound}:Filter) => {
         params.delete(key);
       }
     }
+    params.set('page', '1')
     setPrevData(values)
-    replace(`${pathname}?${params.toString()}`);
-  }
+    push(`${pathname}?${params.toString()}`);
+    }
   
   function onReset() {
-    replace(pathname)
+    replace(`${pathname}`)
     form.reset()
   }
 
@@ -635,6 +645,8 @@ const Filter = ({loading, notFound}:Filter) => {
               className='block h-10 text-slate-900'>
                 Сбросить
               </button>
+              {/* <div>{JSON.stringify(form.getValues)}</div>
+              <div>{JSON.stringify(prevData)}</div> */}
           </div>
           {
             loading ? (

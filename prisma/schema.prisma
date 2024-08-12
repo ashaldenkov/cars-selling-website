@@ -32,7 +32,7 @@ model car {
   price                                                        Int?
   production_year                                              Int?
   images                                                       String[]
-  engine_capacity                                              Int?
+  engine_capacity                                              Float?                
   engine_power                                                 Int?
   engine_type                                                  String?               @db.Char(255)
   car_drive                                                    String?               @db.Char(255)

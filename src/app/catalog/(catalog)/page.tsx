@@ -21,6 +21,7 @@ async function getSomething() {
 }
 
 interface SearchParams {
+  page?: string,
   carBrand?: string,
   carModel?: string,
   yearFrom?: string,
@@ -46,8 +47,20 @@ export default async function Details({
   const list2 = await getSomething()
   const carsList = await api.cars.getFiltered(searchParams);
 
+
+  //pagination skipping posts
+  const postLimitPerPage = 5
+  const showPosts = carsList.slice(
+    postLimitPerPage * ((Number(searchParams.page) - 1) || 0),
+    postLimitPerPage * (Number(searchParams.page) || 1)
+  )
+  
     return (
     <div className="flex justify-center">
+      <div>{JSON.stringify(searchParams)}</div>
+      <div>{JSON.stringify(carsList)}</div>
+      <div>{searchParams.engineCapacityFrom ? parseFloat(searchParams.engineCapacityFrom) : ''}</div>
+      <div>{searchParams?.engineCapacityTo }</div>
       {/* if no data found on our fetching show another component */}
           {carsList[0] ? (
             <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
@@ -61,10 +74,10 @@ export default async function Details({
               <div className="lg:mt-10 mb-[25px] py-[15px] max-lg:px-4 text-slate-500 text-base flex justify-start w-full max-w-[720px]">
                 Найдено: {carsList.length}
               </div>
-              <CarList data={carsList}/>
+              <CarList data={showPosts}/>
               <div className="w-full max-w-[720px]">
               </div>
-              <PaginationComponent/>
+              <PaginationComponent page={Number(searchParams.page) || 1} maxPages={Math.ceil(carsList.length / postLimitPerPage)}/>
             </div>
             ) : <NotFoundCatalog/>
           }    
