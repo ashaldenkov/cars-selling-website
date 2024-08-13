@@ -198,7 +198,7 @@ const Filter = ({loading, notFound}:Filter) => {
             name="carModel"
             render={({ field }) => (
               <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px]">
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Модель" />
@@ -645,8 +645,6 @@ const Filter = ({loading, notFound}:Filter) => {
               className='block h-10 text-slate-900'>
                 Сбросить
               </button>
-              {/* <div>{JSON.stringify(form.getValues)}</div>
-              <div>{JSON.stringify(prevData)}</div> */}
           </div>
           {
             loading ? (
@@ -655,7 +653,7 @@ const Filter = ({loading, notFound}:Filter) => {
               Загрузка...
             </Button>
             ) : (
-              notFound ? (
+              ( JSON.stringify(prevData) == JSON.stringify(form.watch()) && notFound ) ? (
             <div className='shrink-0 flex items-center justify-center h-10 w-full min-[720px]:min-w-[130px] min-[720px]:w-fit px-4 rounded-md text-white bg-loading'>
               Ничего не найдено
             </div>

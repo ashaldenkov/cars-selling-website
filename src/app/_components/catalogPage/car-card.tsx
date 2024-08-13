@@ -43,13 +43,13 @@ const driveName = (title?: string|null) => {
 const CarCard = ({carData}: Car) => {
     
   return (
-    <Link href={`/catalog/details/${carData.id}`} className='block border-b border-slate-200 w-full flex justify-between max-w-[720px] py-4 lg:py-9 px-4 rounded lg:flex hover:bg-slate-100'>
+    <Link href={`/catalog/details/${carData.id}`} className='block border-b border-slate-200 w-full min-[720px]:flex min-[720px]:justify-between max-w-[720px] py-4 lg:py-9 px-4 rounded lg:flex hover:bg-slate-100'>
         <div className='text-slate-900 lg:hidden'>{carData.title}</div>
         <div>
             <div className='text-slate-900 text-lg font-semibold whitespace-nowrap'>{`${new Intl.NumberFormat("ru-RU").format(carData.price)} ₩`}</div>
             <div className='max-lg:hidden text-sm text-slate-500 text-end'>корейских вон</div>
         </div>
-        <div className='flex max-lg:mt-2.5 lg:order-first'>
+        <div className='flex max-lg:mt-2.5 min-[720px]:order-first'>
             <Image
                 className='w-[170px] h-[127.5px] max-lg:order-first rounded mr-5'
                 src={ carData.images[0] ? carData.images[0] : NoImage}

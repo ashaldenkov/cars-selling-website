@@ -49,10 +49,11 @@ export const carsRouter = createTRPCRouter({
         production_year: {gte: input.yearFrom ? Number(input.yearFrom) : undefined,
           lte: input.yearTo ? Number(input.yearTo) : undefined,
         },
-        price: {
+        price: {gte: input.priceFrom ? Number(input.priceFrom) : undefined,
+          lte: input.priceTo ? Number(input.priceTo) : undefined
         },
-        engine_capacity: {gte: input.engineCapacityFrom ? Number(input.engineCapacityFrom) : undefined,
-          lte: input.engineCapacityTo ? Number(input.engineCapacityTo) : undefined
+        engine_capacity: {gte: input.engineCapacityFrom ? parseFloat(input.engineCapacityFrom) : undefined,
+          lte: input.engineCapacityTo ? parseFloat(input.engineCapacityTo) : undefined
         },
         generation_id: input.generation ? Number(input.generation) : undefined,
         engine_power: input.enginePower ? Number(input.enginePower) : undefined,

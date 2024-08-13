@@ -12,7 +12,11 @@ import LoadingCalc from "@/app/_components/LoadingVersionPages/loading-calculato
 import ImageCarousel from "@/app/_components/detailsPage/image-carousel";
 import { api } from "@/trpc/server";
 
-// Описание -- 
+// Описание 
+    // Пытался сообщить id которые надо пререндерить во время сборки для SSG, но если раскоментить функцию появляется ошибка на вызов headers in global scope, 
+    // хотя в документации указано что ее там и надо вызывать. headers вызываются в trpc/server.ts так как для получения списка id мне сначала надо получить список всех машин с апи
+    // https://nextjs.org/docs/app/api-reference/functions/generate-static-params   
+
   // export const generateStaticParams = async () => {
   //   const carList = await api.cars.getFiltered({});
   //   const paths = carList.map( car => {
@@ -38,7 +42,7 @@ export default async function Details( { params }: {
           <div className="w-full order-first">
             <Breadcrumbs/>
           </div>
-          <ImageCarousel/>
+          <ImageCarousel links={carInfo?.images}/>
           <div className="lg:-order-1 max-lg:my-[30px] max-lg:px-4 lg:mb-[40px]">
             <div className="text-slate-900 lg:text-3xl lg:font-semibold">{`${carInfo?.title}`}</div>
             <div className="max-lg:hidden text-sm text-slate-500 pt-5">{format((carInfo?.last_update || 'date undefined'), 'd MMMM', {locale: ru})}</div>

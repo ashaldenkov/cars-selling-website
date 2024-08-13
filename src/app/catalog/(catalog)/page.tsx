@@ -10,16 +10,6 @@ import NotFoundCatalog from "@/app/_components/LoadingVersionPages/not-found-cat
 //server part
 import { api } from "@/trpc/server";
 
-//imitating loading data
-async function getSomething() {  
-  //delay here
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  //if link is /users then we load data, if /users/asdasd then it will be not found
-  const res = await fetch('https://jsonplaceholder.typicode.com/users/')
-  .then(response => response.json())
-  return res
-}
-
 interface SearchParams {
   page?: string,
   carBrand?: string,
@@ -39,12 +29,12 @@ interface SearchParams {
   mileageFrom?: string,
   mileageTo?: string,
 }
+
 export default async function Details({
   searchParams,
 }: {
   searchParams: SearchParams
 }) {
-  const list2 = await getSomething()
   const carsList = await api.cars.getFiltered(searchParams);
 
 
@@ -57,10 +47,6 @@ export default async function Details({
   
     return (
     <div className="flex justify-center">
-      <div>{JSON.stringify(searchParams)}</div>
-      <div>{JSON.stringify(carsList)}</div>
-      <div>{searchParams.engineCapacityFrom ? parseFloat(searchParams.engineCapacityFrom) : ''}</div>
-      <div>{searchParams?.engineCapacityTo }</div>
       {/* if no data found on our fetching show another component */}
           {carsList[0] ? (
             <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
@@ -68,7 +54,7 @@ export default async function Details({
                 <Filter/>
               </div>
               <AdsBanner/>
-              <div className="lg:order-first self-start">
+              <div className="lg:order-first self-start w-full max-w-[720px] mx-auto">
                 <Breadcrumbs/>
               </div>
               <div className="lg:mt-10 mb-[25px] py-[15px] max-lg:px-4 text-slate-500 text-base flex justify-start w-full max-w-[720px]">

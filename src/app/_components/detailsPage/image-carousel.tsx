@@ -9,6 +9,7 @@ import Arrow from '@/app/_images/ImageArrow.png'
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import NoImage from '@/app/_images/noimage.png'
 
 //simulating photo links
  const imgData = ['https://s3-alpha-sig.figma.com/img/c764/9fbc/6fd5409ec9bb97a8d321bb51b541cdab?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZlNzDIHIPu5eqyNFX6CcxRzJyCWN-vQFijNmqiTSzXQ4o7oUYghskMIF9P5TsRC1v4BsvH9PVhAEjvbG1jaSWfabA-8ObvwPbT~IAYHCY00aVM1v6~aWZAqh7M4kjrsf8ocrkz208MENfrTAzBYFBzT8O2Y0l0PgbAly-PVwvPBzcfoN2VE0TyqY9y-zOrQ6klAbbpLIosZvbXXJkjfw5nkLaTATE9eGVVNvgEP4cEdnVvhEZ6reIFxrUht7bKdUaUpiPjIcexwSHGuDrl7eTO~EKmNsW3TwvhPTTbHEn-SHtNDVjiZGEDouNC2ZUUIoEVDMKAXbIggo8-2guF2ePA__',
@@ -30,8 +31,11 @@ const paginationClasses = `[&_.swiper-pagination]:right-0 [&_.swiper-pagination]
         [&_.swiper-pagination]:w-fit [&_.swiper-pagination]:bottom-0 [&_.swiper-pagination]:bg-[#1E1E1EB2] [&_.swiper-pagination]:text-xs	
         [&_.swiper-pagination]:text-white [&_.swiper-pagination]:py-2.5 [&_.swiper-pagination]:px-4 [&_.swiper-pagination]:rounded-full [&_.swiper-pagination]:cursor-default`
 
+interface Images {
+    links: string[] | undefined
+}
 
-const ImageCarousel = () => {
+const ImageCarousel = ({links}:Images) => {
     const [firstSwiper, setFirstSwiper] = useState<any>(null);
     const [secondSwiper, setSecondSwiper] = useState<any>(null);
     const [activeIndex, setActiveIndex] = useState<number>(1);
@@ -39,7 +43,7 @@ const ImageCarousel = () => {
 
   return (
     <div className='w-full z-0'>
-
+        <div>{links}</div>
         {/*Main slider*/}
         <Swiper
         modules={[Pagination, Controller]}
@@ -51,7 +55,7 @@ const ImageCarousel = () => {
         controller={{ control: secondSwiper }}
         >
 
-            {imgData.map((imageLink, index) => {
+            {(links && links?.length !== 0) ? (links.map((imageLink, index) => {
                 return (
                     <SwiperSlide key={index}>
                         <div>
@@ -66,7 +70,21 @@ const ImageCarousel = () => {
                         </div>
                     </SwiperSlide>
                 )
-            })}
+            })) : (
+                <SwiperSlide>
+                <div>
+                    <Image
+                    className='object-cover w-1/2 mx-auto'
+                    src={NoImage}
+                    priority={true}
+                    width={1024}
+                    height={768}
+                    alt="Car image"
+                    />
+                </div>
+            </SwiperSlide>
+            )
+            }
 
         {/*arrow controls*/}
 
@@ -92,7 +110,7 @@ const ImageCarousel = () => {
 
         {/*Thumbs pc*/}
         <ul className='flex flex-wrap gap-5 mt-5 max-[720px]:hidden'>
-            {imgData.map((imageLink, index) => {
+            {(links && links?.length !== 0) ? imgData.map((imageLink, index) => {
                     return (
                         <li key={index} className='w-[100px] h-[100px]'>
                             <button onClick={() => firstSwiper.slideTo(index)}>
@@ -107,7 +125,8 @@ const ImageCarousel = () => {
                             </button>
                         </li>
                     )
-                })}
+                }) : null
+                }
         </ul> 
 
         {/*Thumbs mobile*/}
@@ -122,7 +141,7 @@ const ImageCarousel = () => {
                     centeredSlides={true}
                     centeredSlidesBounds={true}
                   >
-                        {imgData.map((imageLink, index) => {
+                        {(links && links?.length !== 0) ? imgData.map((imageLink, index) => {
                             return (
                                 <SwiperSlide key={index}>
                                     <div onClick={() => firstSwiper.slideTo(index)}>
@@ -137,7 +156,8 @@ const ImageCarousel = () => {
                                     </div>
                                 </SwiperSlide>
                             )
-                        })}
+                        })
+                    : null}
                   </Swiper> 
         ): null
         }

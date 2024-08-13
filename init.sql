@@ -8,7 +8,7 @@ END $$;
 CREATE TABLE IF NOT EXISTS public.available_attributes
 (
     id SERIAL,
-    title character(255) NOT NULL,
+    title text NOT NULL,
     att_type ATTRIBUTE_TYPE NOT NULL DEFAULT 'ATTRIBUTE',
     parent_att integer NULL REFERENCES public.available_attributes(id),
     description text COLLATE pg_catalog."default",
@@ -20,17 +20,17 @@ CREATE TABLE IF NOT EXISTS public.available_attributes
 CREATE TABLE IF NOT EXISTS public.car
 (
     id SERIAL,
-    title character(500) NOT NULL,
-    color character(255) NULL,
+    title text NOT NULL,
+    color text NULL,
     car_mileage integer NULL,
     price integer NULL,
     production_year integer NULL,
     images text[] COLLATE pg_catalog."default",
-    engine_capacity integer NULL,
+    engine_capacity float NULL,
     engine_power integer NULL,
-    engine_type character(255) NULL,
-    car_drive character(255) NULL,
-    car_number character(255) NULL,
+    engine_type text NULL,
+    car_drive text NULL,
+    car_number text NULL,
     brand_id integer REFERENCES public.available_attributes(id),
     model_id integer REFERENCES public.available_attributes(id),
     generation_id integer REFERENCES public.available_attributes(id),

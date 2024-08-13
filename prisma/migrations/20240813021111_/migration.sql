@@ -4,7 +4,7 @@ CREATE TYPE "attribute_type" AS ENUM ('BRAND', 'MODEL', 'GENERATION', 'ATTRIBUTE
 -- CreateTable
 CREATE TABLE "available_attributes" (
     "id" SERIAL NOT NULL,
-    "title" CHAR(255) NOT NULL,
+    "title" TEXT NOT NULL,
     "att_type" "attribute_type" NOT NULL DEFAULT 'ATTRIBUTE',
     "parent_att" INTEGER,
     "description" TEXT,
@@ -16,17 +16,17 @@ CREATE TABLE "available_attributes" (
 -- CreateTable
 CREATE TABLE "car" (
     "id" SERIAL NOT NULL,
-    "title" CHAR(500) NOT NULL,
-    "color" CHAR(255),
+    "title" TEXT NOT NULL,
+    "color" TEXT,
     "car_mileage" INTEGER,
     "price" INTEGER,
     "production_year" INTEGER,
     "images" TEXT[],
     "engine_capacity" DOUBLE PRECISION,
     "engine_power" INTEGER,
-    "engine_type" CHAR(255),
-    "car_drive" CHAR(255),
-    "car_number" CHAR(255),
+    "engine_type" TEXT,
+    "car_drive" TEXT,
+    "car_number" TEXT,
     "brand_id" INTEGER,
     "model_id" INTEGER,
     "generation_id" INTEGER,
