@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -9,7 +10,7 @@ datasource db {
 
 model available_attributes {
   id                                          Int                    @id(map: "available_attributes_pk") @default(autoincrement())
-  title                                       String                 @db.Text
+  title                                       String
   att_type                                    attribute_type         @default(ATTRIBUTE)
   parent_att                                  Int?
   description                                 String?
@@ -26,17 +27,17 @@ model available_attributes {
 
 model car {
   id                                                           Int                   @id @default(autoincrement())
-  title                                                        String                @db.Text
-  color                                                        String?               @db.Text
+  title                                                        String
+  color                                                        String?
   car_mileage                                                  Int?
   price                                                        Int?
   production_year                                              Int?
   images                                                       String[]
-  engine_capacity                                              Float?                
+  engine_capacity                                              Float?
   engine_power                                                 Int?
-  engine_type                                                  String?               @db.Text
-  car_drive                                                    String?               @db.Text
-  car_number                                                   String?               @db.Text
+  engine_type                                                  String?
+  car_drive                                                    String?
+  car_number                                                   String?
   brand_id                                                     Int?
   model_id                                                     Int?
   generation_id                                                Int?

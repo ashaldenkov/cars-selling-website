@@ -5,10 +5,13 @@ import Breadcrumbs from "@/app/_components/sharedComponents/breadcrumbs"
 import Filter from "@/app/_components/catalogPage/filter"
 import CarList from "@/app/_components/catalogPage/car-list"
 import NotFoundCatalog from "@/app/_components/LoadingVersionPages/not-found-catalog"
-
+import Loading from './loading'
 
 //server part
 import { api } from "@/trpc/server";
+import { Suspense } from "react"
+
+export const dynamic = 'force-static'
 
 interface SearchParams {
   page?: string,
@@ -30,13 +33,30 @@ interface SearchParams {
   mileageTo?: string,
 }
 
+async function getSomething() {  
+  //delay here
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  //if link is /users then we load data, if /users/asdasd then it will be not found
+  const res = await fetch('https://jsonplaceholder.typicode.com/users/')
+  .then(response => response.json())
+  return res
+}
+
 export default async function Details({
   searchParams,
 }: {
   searchParams: SearchParams
 }) {
-  const carsList = await api.cars.getFiltered(searchParams);
+  let carsList:any
+  
+  try{
+    carsList = await api.cars.getFiltered(searchParams);
+  } catch(err) {
+    carsList = []
+    console.log('Cant connect to database, please try later')
+  }
 
+  const delay = await getSomething()
 
   //pagination skipping posts
   const postLimitPerPage = 5
@@ -51,7 +71,9 @@ export default async function Details({
           {carsList[0] ? (
             <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
               <div className="max-lg:order-first w-full flex flex-col items-center">
+              <Suspense fallback={<Loading/>} >
                 <Filter/>
+              </Suspense>
               </div>
               <AdsBanner/>
               <div className="lg:order-first self-start w-full max-w-[720px] mx-auto">
@@ -63,7 +85,10 @@ export default async function Details({
               <CarList data={showPosts}/>
               <div className="w-full max-w-[720px]">
               </div>
+              <Suspense fallback={<Loading/>} >
               <PaginationComponent page={Number(searchParams.page) || 1} maxPages={Math.ceil(carsList.length / postLimitPerPage)}/>
+              </Suspense>
+
             </div>
             ) : <NotFoundCatalog/>
           }    

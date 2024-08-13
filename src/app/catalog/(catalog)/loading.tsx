@@ -4,7 +4,7 @@ import AdsBanner from '@/app/_components/sharedComponents/ads'
 import Breadcrumbs from "@/app/_components/sharedComponents/breadcrumbs"
 import ContacsUs from "@/app/_components/sharedComponents/contacs-us"
 
-const LoadingCatalog = () => {
+const Loading = () => {
   return (
 <div className="flex justify-center">
   <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
@@ -47,4 +47,4 @@ const LoadingCatalog = () => {
   )
 }
 
-export default LoadingCatalog
+export default Loading

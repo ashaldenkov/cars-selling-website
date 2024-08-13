@@ -31,11 +31,21 @@ import { api } from "@/trpc/server";
   //   }
   // }
 
+  async function getSomething() {  
+    //delay here
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    //if link is /users then we load data, if /users/asdasd then it will be not found
+    const res = await fetch('https://jsonplaceholder.typicode.com/users/')
+    .then(response => response.json())
+    return res
+  }
 
 export default async function Details( { params }: {
   params: { carID: string }
 }) {
   const carInfo = await api.cars.findCarById(params.carID);
+  const delay = await getSomething();
+  
   return (
     <div className="flex justify-center">
         <div className="flex flex-col items-start min-h-screen w-full max-[720px]:max-w-full max-w-[720px]">

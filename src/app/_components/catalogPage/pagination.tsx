@@ -46,6 +46,7 @@ export default function PaginationComponent({maxPages, page}: Pagination) {
   }
 
   return (
+    
     <div className="flex justify-center w-full my-[50px]">
         <ReactPaginate 
             containerClassName={'flex justify-center w-full max-w-[720px] font-medium	text-sm max-lg:px-4'}
