@@ -63,7 +63,7 @@ const CarCard = ({carData}: Car) => {
                 <div className='flex flex-wrap text-sm'>
                     <p>{carData.production_year ? `${carData.production_year} г.,\u00A0` : ''}</p>
                     <p>{carData.engine_capacity ? `${carData.engine_capacity}л.,\u00A0` : ''}</p>
-                    <p>{carData.car_mileage ? `${carData.car_mileage.toString().replace(/(\d{1,3}(?=(?:\d\d\d)+(?!\d)))/g, "$1" + ",")} км,\u00A0` : ''}</p>
+                    <p>{carData.distance ? `${carData.distance.toString().replace(/(\d{1,3}(?=(?:\d\d\d)+(?!\d)))/g, "$1" + ",")} км,\u00A0` : ''}</p>
                     <p>{`Автомат,\u00A0`}</p>
                     <p>{`Бензин,\u00A0`}</p>
                     <p>{carData.car_drive ? `${driveName(carData.car_drive)},\u00A0` : ''}</p>

@@ -6,7 +6,7 @@ interface CarData {
         id: number;
         title: string;
         color: string | null;
-        car_mileage: number | null;
+        distance: number | null;
         price: number | null;
         production_year: number | null;
         images: string[];
@@ -73,7 +73,7 @@ const DetailsModalInfo = ({carInfo}: CarData) => {
             </div>
             <div className='flex mt-4'>
                 <div className='text-med text-slate-500 w-[156px] shrink-0'>Пробег</div>
-                <div className='text-med text-slate-900'>{`${new Intl.NumberFormat("ru-RU").format(carInfo?.car_mileage || 0)} км`}</div>
+                <div className='text-med text-slate-900'>{`${new Intl.NumberFormat("ru-RU").format(carInfo?.distance || 0)} км`}</div>
             </div>
             <div className='flex mt-4'>
                 <div className='text-med text-slate-500 w-[156px] shrink-0'>Трансмиссия</div>

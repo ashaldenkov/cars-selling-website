@@ -61,12 +61,18 @@ export const carsRouter = createTRPCRouter({
         car_drive: (input.transmission && input.transmission !== 'any') ? input.transmission : undefined,
         color: input.color ? input.color : undefined,
         car_number: input.carNumber ? { contains: input.carNumber, } : undefined,
-        car_mileage: {gte: input.mileageFrom ? Number(input.mileageFrom) : undefined,
+        distance: {gte: input.mileageFrom ? Number(input.mileageFrom) : undefined,
           lte: input.mileageTo ? Number(input.mileageTo) : undefined,
         },
       }
     });
            
+    return user;
+  }),
+  
+  getAll: publicProcedure
+  .query(async (opts) => {
+    const user = await db.car.findMany();
     return user;
   }),
 });

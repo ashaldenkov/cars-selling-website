@@ -8,60 +8,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model available_attributes {
-  id                                          Int                    @id(map: "available_attributes_pk") @default(autoincrement())
-  title                                       String
-  att_type                                    attribute_type         @default(ATTRIBUTE)
-  parent_att                                  Int?
-  description                                 String?
-  last_update                                 DateTime?              @default(now()) @db.Timestamp(6)
-  available_attributes                        available_attributes?  @relation("available_attributesToavailable_attributes", fields: [parent_att], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  other_available_attributes                  available_attributes[] @relation("available_attributesToavailable_attributes")
-  car_car_brand_idToavailable_attributes      car[]                  @relation("car_brand_idToavailable_attributes")
-  car_car_generation_idToavailable_attributes car[]                  @relation("car_generation_idToavailable_attributes")
-  car_car_model_idToavailable_attributes      car[]                  @relation("car_model_idToavailable_attributes")
-  car_attributes                              car_attributes[]
-
-  @@unique([title, att_type], map: "unique_title_att_type")
-}
-
 model car {
-  id                                                           Int                   @id @default(autoincrement())
-  title                                                        String
-  color                                                        String?
-  car_mileage                                                  Int?
-  price                                                        Int?
-  production_year                                              Int?
-  images                                                       String[]
-  engine_capacity                                              Float?
-  engine_power                                                 Int?
-  engine_type                                                  String?
-  car_drive                                                    String?
-  car_number                                                   String?
-  brand_id                                                     Int?
-  model_id                                                     Int?
-  generation_id                                                Int?
-  visible                                                      Boolean               @default(true)
-  last_update                                                  DateTime?             @default(now()) @db.Timestamp(6)
-  available_attributes_car_brand_idToavailable_attributes      available_attributes? @relation("car_brand_idToavailable_attributes", fields: [brand_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  available_attributes_car_generation_idToavailable_attributes available_attributes? @relation("car_generation_idToavailable_attributes", fields: [generation_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  available_attributes_car_model_idToavailable_attributes      available_attributes? @relation("car_model_idToavailable_attributes", fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  car_attributes                                               car_attributes[]
-}
+  car_id            Int
+  title             String    @db.Char(500)
+  title_ru          String?   @db.Char(500)
+  price             Int
+  images            String[]
+  external_url      String?
+  color             String?   @db.Char(500)
+  color_ru          String?   @db.Char(500)
+  distance          Int
+  production_year   Int
+  fuel_type         String    @db.Char(500)
+  fuel_type_ru      String?   @db.Char(500)
+  v_type            String    @db.Char(500)
+  v_type_ru         String?   @db.Char(500)
+  registration_date DateTime? @db.Timestamp(6)
+  last_update       DateTime? @default(now()) @db.Timestamp(6)
+  sold              Boolean   @default(false)
+  id                BigInt    @id @default(autoincrement())
 
-model car_attributes {
-  attribute_id         Int
-  car_id               Int
-  value                String
-  available_attributes available_attributes @relation(fields: [attribute_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  car                  car                  @relation(fields: [car_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([attribute_id, car_id], map: "cat_attribute_pk")
 }
 
 enum attribute_type {
   BRAND
   MODEL
-  GENERATION
+  SUBMODEL
+  SERIES_NAME
+  DETAILED_GRADE
   ATTRIBUTE
+  COUNTRY
 }

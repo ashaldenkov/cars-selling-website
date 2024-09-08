@@ -50,7 +50,8 @@ export default async function Details({
   let carsList:any
   
   try{
-    carsList = await api.cars.getFiltered(searchParams);
+    // carsList = await api.cars.getFiltered(searchParams);
+    carsList = await api.cars.getAll();
   } catch(err) {
     carsList = []
     console.log('Cant connect to database, please try later')
