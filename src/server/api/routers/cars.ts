@@ -4,7 +4,6 @@ import { db } from '@/server/db';
 import { createTRPCRouter, publicProcedure } from "@/server/trpc";
 
 
-
 export const carsRouter = createTRPCRouter({
   findCarById: publicProcedure
   .input(z.string())
@@ -39,13 +38,13 @@ export const carsRouter = createTRPCRouter({
     mileageTo: z.string().optional(),
     generationOptions: z.string().optional()
   }))
-  .query(async (opts) => {
+  .query(async (opts: any) => {
     const { input } = opts;
     
     const user = await db.car.findMany({
       where: {
-        brand_id: input.carBrand ? Number(input?.carBrand) : undefined,
-        model_id: input.carModel ? Number(input?.carModel) : undefined,
+        brand_id: input.carBrand ? input?.carBrand : undefined,
+        model_id: input.carModel ? input?.carModel : undefined,
         production_year: {gte: input.yearFrom ? Number(input.yearFrom) : undefined,
           lte: input.yearTo ? Number(input.yearTo) : undefined,
         },
@@ -55,9 +54,9 @@ export const carsRouter = createTRPCRouter({
         engine_capacity: {gte: input.engineCapacityFrom ? parseFloat(input.engineCapacityFrom) : undefined,
           lte: input.engineCapacityTo ? parseFloat(input.engineCapacityTo) : undefined
         },
-        generation_id: input.generation ? Number(input.generation) : undefined,
+        generation_id: input.generation ? input.generation : undefined,
         engine_power: input.enginePower ? Number(input.enginePower) : undefined,
-        engine_type: input.engineType ? input.engineType : undefined,
+        fuel_type_ru: input.engineType ? input.engineType : undefined,
         car_drive: (input.transmission && input.transmission !== 'any') ? input.transmission : undefined,
         color: input.color ? input.color : undefined,
         car_number: input.carNumber ? { contains: input.carNumber, } : undefined,
@@ -69,10 +68,9 @@ export const carsRouter = createTRPCRouter({
            
     return user;
   }),
-  
-  getAll: publicProcedure
-  .query(async (opts) => {
-    const user = await db.car.findMany();
-    return user;
+  listAll: publicProcedure
+  .query(async () => {
+    const car = await db.car.findMany();
+    return car;
   }),
 });

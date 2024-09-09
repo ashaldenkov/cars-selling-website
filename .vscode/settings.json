@@ -1,14 +1,16 @@
 {
     "sqltools.connections": [
         {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
             "previewLimit": 50,
             "server": "localhost",
-            "port": 5432,
             "driver": "PostgreSQL",
-            "name": "test",
-            "database": "TestDB",
-            "username": "postgres",
-            "password": "test"
+            "name": "vercel",
+            "connectString": "postgres://default:XJBNtSVrld14@ep-old-morning-a1nvm2bq.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
         }
     ]
 }

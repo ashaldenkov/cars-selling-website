@@ -50,14 +50,14 @@ export default async function Details({
   let carsList:any
   
   try{
-    // carsList = await api.cars.getFiltered(searchParams);
-    carsList = await api.cars.getAll();
+  carsList = await api.cars.listAll();
+   // carsList = await api.cars.getFiltered(searchParams);
   } catch(err) {
     carsList = []
-    console.log('Cant connect to database, please try later')
+    console.log(err)
   }
 
-  const delay = await getSomething()
+  //const delay = await getSomething()
 
   //pagination skipping posts
   const postLimitPerPage = 5
@@ -68,6 +68,7 @@ export default async function Details({
   
     return (
     <div className="flex justify-center">
+      {JSON.stringify(carsList)}
       {/* if no data found on our fetching show another component */}
           {carsList[0] ? (
             <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">

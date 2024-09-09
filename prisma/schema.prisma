@@ -5,29 +5,37 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model car {
+  id                Int       @id @default(autoincrement())
   car_id            Int
-  title             String    @db.Char(500)
-  title_ru          String?   @db.Char(500)
+  title             String
+  title_ru          String?
   price             Int
   images            String[]
   external_url      String?
-  color             String?   @db.Char(500)
-  color_ru          String?   @db.Char(500)
+  color             String?
+  color_ru          String?
   distance          Int
   production_year   Int
-  fuel_type         String    @db.Char(500)
-  fuel_type_ru      String?   @db.Char(500)
-  v_type            String    @db.Char(500)
-  v_type_ru         String?   @db.Char(500)
+  fuel_type         String
+  fuel_type_ru      String?
+  v_type            String
+  v_type_ru         String?
   registration_date DateTime? @db.Timestamp(6)
   last_update       DateTime? @default(now()) @db.Timestamp(6)
   sold              Boolean   @default(false)
-  id                BigInt    @id @default(autoincrement())
-
+  ready             Boolean   @default(false)
+  engine_capacity   Float?    @db.Real
+  engine_power      Int?
+  car_drive         String?
+  car_number        String?
+  brand_id          String?
+  model_id          String?
+  generation_id     String?
 }
 
 enum attribute_type {

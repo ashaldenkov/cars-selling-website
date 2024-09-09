@@ -54,8 +54,8 @@ export default async function Details( { params }: {
           </div>
           <ImageCarousel links={carInfo?.images}/>
           <div className="lg:-order-1 max-lg:my-[30px] max-lg:px-4 lg:mb-[40px]">
-            <div className="text-slate-900 lg:text-3xl lg:font-semibold">{`${carInfo?.title}`}</div>
-            <div className="max-lg:hidden text-sm text-slate-500 pt-5">{format((carInfo?.last_update || 'date undefined'), 'd MMMM', {locale: ru})}</div>
+            <div className="text-slate-900 lg:text-3xl lg:font-semibold">{`${carInfo?.title_ru ? carInfo?.title_ru : carInfo?.title}`}</div>
+            <div className="max-lg:hidden text-sm text-slate-500 pt-5">{format((carInfo?.last_update || 'date undefined'), 'd MMMM yyyy', {locale: ru})}</div>
           </div>
           <div className="lg:hidden w-full px-4">
             <DetailsModalInfo carInfo={carInfo}/>

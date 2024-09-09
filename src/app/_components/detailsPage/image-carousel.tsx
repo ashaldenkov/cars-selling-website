@@ -25,7 +25,7 @@ import NoImage from '@/app/_images/noimage.png'
 'https://s3-alpha-sig.figma.com/img/c764/9fbc/6fd5409ec9bb97a8d321bb51b541cdab?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZlNzDIHIPu5eqyNFX6CcxRzJyCWN-vQFijNmqiTSzXQ4o7oUYghskMIF9P5TsRC1v4BsvH9PVhAEjvbG1jaSWfabA-8ObvwPbT~IAYHCY00aVM1v6~aWZAqh7M4kjrsf8ocrkz208MENfrTAzBYFBzT8O2Y0l0PgbAly-PVwvPBzcfoN2VE0TyqY9y-zOrQ6klAbbpLIosZvbXXJkjfw5nkLaTATE9eGVVNvgEP4cEdnVvhEZ6reIFxrUht7bKdUaUpiPjIcexwSHGuDrl7eTO~EKmNsW3TwvhPTTbHEn-SHtNDVjiZGEDouNC2ZUUIoEVDMKAXbIggo8-2guF2ePA__',
 
 ]
-
+ const testImg = 'https://s3-alpha-sig.figma.com/img/c764/9fbc/6fd5409ec9bb97a8d321bb51b541cdab?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=ZlNzDIHIPu5eqyNFX6CcxRzJyCWN-vQFijNmqiTSzXQ4o7oUYghskMIF9P5TsRC1v4BsvH9PVhAEjvbG1jaSWfabA-8ObvwPbT~IAYHCY00aVM1v6~aWZAqh7M4kjrsf8ocrkz208MENfrTAzBYFBzT8O2Y0l0PgbAly-PVwvPBzcfoN2VE0TyqY9y-zOrQ6klAbbpLIosZvbXXJkjfw5nkLaTATE9eGVVNvgEP4cEdnVvhEZ6reIFxrUht7bKdUaUpiPjIcexwSHGuDrl7eTO~EKmNsW3TwvhPTTbHEn-SHtNDVjiZGEDouNC2ZUUIoEVDMKAXbIggo8-2guF2ePA__'
 
 const paginationClasses = `[&_.swiper-pagination]:right-0 [&_.swiper-pagination]:left-auto [&_.swiper-pagination]:mb-2 [&_.swiper-pagination]:mr-2 
         [&_.swiper-pagination]:w-fit [&_.swiper-pagination]:bottom-0 [&_.swiper-pagination]:bg-[#1E1E1EB2] [&_.swiper-pagination]:text-xs	
@@ -43,7 +43,6 @@ const ImageCarousel = ({links}:Images) => {
 
   return (
     <div className='w-full z-0'>
-        <div>{links}</div>
         {/*Main slider*/}
         <Swiper
         modules={[Pagination, Controller]}
@@ -61,7 +60,7 @@ const ImageCarousel = ({links}:Images) => {
                         <div>
                             <Image
                             className='object-cover'
-                            src={imageLink}
+                            src={testImg}
                             priority={true}
                             width={1024}
                             height={768}
@@ -110,14 +109,14 @@ const ImageCarousel = ({links}:Images) => {
 
         {/*Thumbs pc*/}
         <ul className='flex flex-wrap gap-5 mt-5 max-[720px]:hidden'>
-            {(links && links?.length !== 0) ? imgData.map((imageLink, index) => {
+            {(links && links?.length !== 0) ? links.map((imageLink, index) => {
                     return (
                         <li key={index} className='w-[100px] h-[100px]'>
                             <button onClick={() => firstSwiper.slideTo(index)}>
                                 <Image
                                 className='h-[100px] w-[100px] object-cover rounded-md'
                                 priority={true}
-                                src={imageLink}
+                                src={testImg}
                                 width={1024}
                                 height={768}
                                 alt="Car preview"
@@ -148,7 +147,7 @@ const ImageCarousel = ({links}:Images) => {
                                         <Image
                                         className={`object-cover h-[100px] ${ activeIndex==index ? 'scale-[0.85]' : null}`}
                                         priority={true}
-                                        src={imageLink}
+                                        src={testImg}
                                         width={1024}
                                         height={768}
                                         alt="Car image"

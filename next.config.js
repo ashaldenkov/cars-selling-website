@@ -24,6 +24,12 @@ const config = {
         hostname: 'cdn.pixabay.com',
         port: '',
         pathname: '/**'
+    },
+    {
+      protocol: 'https',
+        hostname: 'habsida-intercar.s3.ap-northeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**'
     },],
   }
 };

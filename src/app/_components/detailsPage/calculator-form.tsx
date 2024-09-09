@@ -114,7 +114,7 @@ const CalculatorForm = ({loading}: CalcForm) => {
                   <FormItem className="w-full mb-5">
                     <FormLabel className='text-[15px] font-normal'>Стоимость автомобиля, ₩ (в корейских вонах)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Введите" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="placeholder:text-slate-400"/>
+                      <Input placeholder="Введите" {...field} autoComplete='off' onChange={(e) => {spaces(e); field.onChange(e)}} className="placeholder:text-slate-400"/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
