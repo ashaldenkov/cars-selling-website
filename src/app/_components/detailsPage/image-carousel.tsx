@@ -10,7 +10,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import NoImage from '@/app/_images/noimage.png'
-import CarPreview from '@/app/_images/carPreview.png'
+import CarPreview from '@/app/_images/carPreview.avif'
 
 
 const paginationClasses = `[&_.swiper-pagination]:right-0 [&_.swiper-pagination]:left-auto [&_.swiper-pagination]:mb-2 [&_.swiper-pagination]:mr-2 

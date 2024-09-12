@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { ru } from 'date-fns/locale'
 import Link from 'next/link'
 import NoImage from '@/app/_images/noimage.png'
-import CarPreview from '@/app/_images/carPreview.png'
+import CarPreview from '@/app/_images/carPreview.avif'
 
 
 interface Car {

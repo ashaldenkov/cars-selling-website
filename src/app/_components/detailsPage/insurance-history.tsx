@@ -9,11 +9,13 @@ import Dislocation  from '@/app/_images/InsuranceIcons/dislocation.png'
 import Repaired  from '@/app/_images/InsuranceIcons/repaired.png'
 import Scratches  from '@/app/_images/InsuranceIcons/scratches.png'
 import FullInsuranceModal from './full-insurance-modal'
+import Parts  from '@/app/_images/InsuranceIcons/insuranceParts.png'
 
 
 
 const typeClass = `text-med text-slate-500 mr-4 lg:mr-10 shrink-0 w-1/2`
 const detailClass = `text-med text-slate-900`
+
 
 
 const InsuranceHistory = () => {
@@ -53,7 +55,7 @@ const InsuranceHistory = () => {
         <div className='rounded-md bg-slate-50 border border-slate-200 w-full flex flex-col items-center lg:items-start px-[30px] py-[30px] text-med'>
             <Image
                 className='w-full max-w-[580px] mb-10'
-                src='https://s3-alpha-sig.figma.com/img/f2fd/b5c5/5e6ab512fda0908fc9a5d1a57ab5f0cb?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=hovB6-9OynvwQ8H-P9wKgHZcjzuyxM5XhFT2FOfCM52htbC13WOBBkLXuN8ikKCBlQYAQqGAOYPQ2Y68zX62khGrqHmQZQu-OYhgHRXXn8JNuVUOA~I7es~lNEGmEEp8xV3K0HOFVcw8Z4owRCJhqMpulgt3s25pBC3CYAMgSGefRjJw~Rq9TboKxF-w~SCj9rODikRxqD3zbGf12b8Q6x8wz5o33l6Yb8Vqnhp73Ce3AOiRUv8NfkvX5MkM88HS-j1TXapy3fl9dxbxGN1bwjvnrrEeMuk9SX7u5tDgVJ1qnHEMckErWNAGSY7RQ75RsCaIPP3oO8Sd8XCLrCtqSQ__'
+                src={Parts}
                 width={1024}
                 height={768}
                 priority={true}
