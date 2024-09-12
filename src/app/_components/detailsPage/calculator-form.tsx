@@ -49,7 +49,7 @@ const CalculatorForm = ({loading}: CalcForm) => {
   const formSchema = z.object({
     destination: z.string().min(1, { message: "Обязательное поле" }),
     price: z.string().min(1, { message: "Обязательное поле" }),
-    engineType: z.string().min(1, { message: "Обязательное поле" }),
+    fuelType: z.string().min(1, { message: "Обязательное поле" }),
     engineCapacity:z.string().min(1, { message: "Обязательное поле" }),
     age: z.string().min(1, { message: "Обязательное поле" }),
   }).required()
@@ -59,7 +59,7 @@ const CalculatorForm = ({loading}: CalcForm) => {
     defaultValues: {
       destination: "",
       price: "",
-      engineType: "",
+      fuelType: "",
       engineCapacity: "",
       age: "",
     },
@@ -123,7 +123,7 @@ const CalculatorForm = ({loading}: CalcForm) => {
 
               <FormField
                 control={form.control}
-                name="engineType"
+                name="fuelType"
                 render={({ field }) => (
                   <FormItem className="w-full mb-5">
                     <FormLabel className='text-[15px] font-normal'>Тип двигателя</FormLabel>

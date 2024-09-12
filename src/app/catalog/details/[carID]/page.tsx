@@ -11,41 +11,19 @@ import Calculator from "@/app/_components/detailsPage/calculator";
 import LoadingCalc from "@/app/_components/LoadingVersionPages/loading-calculator";
 import ImageCarousel from "@/app/_components/detailsPage/image-carousel";
 import { api } from "@/trpc/server";
+import { sql } from "@vercel/postgres";
 
-// Описание 
-    // Пытался сообщить id которые надо пререндерить во время сборки для SSG, но если раскоментить функцию появляется ошибка на вызов headers in global scope, 
-    // хотя в документации указано что ее там и надо вызывать. headers вызываются в trpc/server.ts так как для получения списка id мне сначала надо получить список всех машин с апи
-    // https://nextjs.org/docs/app/api-reference/functions/generate-static-params   
-
-  // export const generateStaticParams = async () => {
-  //   const carList = await api.cars.getFiltered({});
-  //   const paths = carList.map( car => {
-  //     return {
-  //       params: { 
-  //         id: car.id.toString() 
-  //       }
-  //     }
-  //   })
-  //   return {
-  //     paths
-  //   }
-  // }
-
-  async function getSomething() {  
-    //delay here
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    //if link is /users then we load data, if /users/asdasd then it will be not found
-    const res = await fetch('https://jsonplaceholder.typicode.com/users/')
-    .then(response => response.json())
-    return res
+  export const generateStaticParams = async () => {
+    const carList = await sql`SELECT * FROM car`
+    return carList?.rows.map( car => {id: car.id.toString()})
   }
+
 
 export default async function Details( { params }: {
   params: { carID: string }
 }) {
   const carInfo = await api.cars.findCarById(params.carID);
-  const delay = await getSomething();
-  
+
   return (
     <div className="flex justify-center">
         <div className="flex flex-col items-start min-h-screen w-full max-[720px]:max-w-full max-w-[720px]">

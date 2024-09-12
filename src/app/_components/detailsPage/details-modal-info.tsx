@@ -1,37 +1,6 @@
 import React from 'react'
 import DetailsModalButtons from './details-modal-buttons'
 
-// interface CarData {
-//     carInfo: {
-//         id: number;
-//         car_id: number;
-//         title: string;
-//         title_ru: string | null;
-//         color: string | null;
-//         color_ru: string | null;
-//         distance: number;
-//         price: number;
-//         production_year: number;
-//         images: string[];
-//         external_url: string | null;
-//         fuel_type: string;
-//         fuel_type_ru: string | null
-//         engine_capacity: number | null;
-//         engine_power: number | null;
-//         car_drive:  string | null;
-//         car_number: string | null;
-//         brand_id:  number | null;
-//         model_id: number | null;
-//         generation_id: string | null;
-//         last_update: Date | null;
-//         registration_date: Date | null;
-//         sold: boolean;
-//         ready: boolean;
-//         v_type:  string;
-//         v_type_ru:  string | null;
-//     } | null
-// }
-
 interface CarData {
     carInfo: any;
 }

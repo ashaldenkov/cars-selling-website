@@ -28,11 +28,13 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 
 
   interface Filter {
     loading?: true;
     notFound?:boolean;
+    filterData?: any;
   }
 
   const Icon = ({isOpen}:{isOpen: boolean}) => {
@@ -43,7 +45,7 @@ import { useRouter } from 'next/navigation';
     );
   };
 
-const Filter = ({loading, notFound}:Filter) => {
+const Filter = ({loading, notFound, filterData}:Filter) => {
 
   const [filterExtended, setFilterExtended] = useState(false); 
   const [prevData, setPrevData] = useState<any>(null)
@@ -75,7 +77,7 @@ const Filter = ({loading, notFound}:Filter) => {
       else e.target.value = e.target.value.slice(0,-1)
     }
   }
-
+  //validation
   const formSchema = z.object({
     carBrand: z.string(),
     carModel: z.string(),
@@ -87,7 +89,7 @@ const Filter = ({loading, notFound}:Filter) => {
     engineCapacityTo: z.string(),
     generation: z.string(),
     enginePower:z.string(),
-    engineType: z.string(),
+    fuelType: z.string(),
     transmission: z.string(),
     color: z.string(),
     carNumber: z.string(),
@@ -98,14 +100,28 @@ const Filter = ({loading, notFound}:Filter) => {
     let tempPrice2 = parseInt(obj.priceTo.replace(/\s/g, ""))
     return (!obj.priceFrom || !obj.priceTo || tempPrice1 <= tempPrice2)
   }
-    , { message: `Введенная цена меньше начальной цены поиска`,
+    , { message: `Неверный диапазон`,
       path: ["priceTo"]
+  }).refine((obj) => {
+    let years1 = parseInt(obj.yearFrom)
+    let years2 = parseInt(obj.yearTo)
+    return (!obj.yearFrom || !obj.yearTo || years1 <= years2)
+  }
+    , { message: `Неверный диапазон`,
+      path: ["yearTo"]
+  }).refine((obj) => {
+    let cap1 = parseInt(obj.engineCapacityFrom)
+    let cap2 = parseInt(obj.engineCapacityTo)
+    return (!obj.engineCapacityFrom || !obj.engineCapacityTo || cap1 <= cap2)
+  }
+    , { message: `Неверный диапазон`,
+      path: ["engineCapacityTo"]
   }).refine((obj) => {
     let tempMiles1 = parseInt(obj.mileageFrom.replace(/\s/g, ""))
     let tempMiles2 = parseInt(obj.mileageTo.replace(/\s/g, ""))
     return (!obj.mileageFrom || !obj.mileageTo || tempMiles1 <= tempMiles2)
   }
-    , { message: `Максимальный пробег должен быть меньше начального`,
+    , { message: `Неверный диапазон`,
       path: ["mileageTo"]
   })
 
@@ -123,7 +139,7 @@ const Filter = ({loading, notFound}:Filter) => {
       engineCapacityTo: "",
       generation: "",
       enginePower:"",
-      engineType: "",
+      fuelType: "",
       transmission: "",
       color: "",
       carNumber: "",
@@ -158,6 +174,35 @@ const Filter = ({loading, notFound}:Filter) => {
   const handleExtendClick = () => {
     setFilterExtended(!filterExtended)
   }
+  
+  //getting select options from db
+//brand filter
+  const brandName = filterData?.map( (car:any) => car.brand_id.toLowerCase())
+  const uniqueBrandName = Array.from(new Set(brandName));
+
+//model filter
+  const modelName = filterData?.map( (car:any) => car.model_id?.toLowerCase())
+  const uniqueModelName = Array.from(new Set(modelName));
+
+  //year filter
+  function createYearArr(maxYear: number){
+    const start = 2010;
+    const arr = [];
+    
+    for (let i = start; i <= maxYear; i++){
+      arr.push(i);
+    }
+    arr.sort((a, b) => b - a);
+    return arr;
+  }
+  const prodYears = filterData?.map( (car:any) => car.production_year)
+  const years = createYearArr(Math.max.apply(null, prodYears))
+  //generation
+  const generation = filterData?.map( (car:any) => car.generation_id)
+  const uniqueGeneration = Array.from(new Set(generation));
+  //color
+  const colors = filterData?.map( (car:any) => car.color_ru?.toLowerCase())
+  const uniqueColors = Array.from(new Set(colors));
 
   return (
 
@@ -180,11 +225,13 @@ const Filter = ({loading, notFound}:Filter) => {
                   <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                     <SelectGroup className="w-[200px]">
                       <SelectLabel>Марка</SelectLabel>
-                      <SelectItem value="hyundai">Hyundai</SelectItem>
-                      <SelectItem value="audi">Audi</SelectItem>
-                      <SelectItem value="bmw">BMW</SelectItem>
-                      <SelectItem value="kia">Kia</SelectItem>
-                      <SelectItem value="toyota">Toyota</SelectItem>
+                      {uniqueBrandName?.map( (title: any, index) => {
+                        if (title) {
+                          return (
+                                  <SelectItem value={title} key={index}>{title[0]?.toUpperCase() + title?.slice(1)}</SelectItem>
+                          )
+                      }
+                      })}
                     </SelectGroup>
                     <ScrollBar orientation="vertical"/>
                   </ScrollArea>
@@ -198,7 +245,7 @@ const Filter = ({loading, notFound}:Filter) => {
             name="carModel"
             render={({ field }) => (
               <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px]">
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Модель" />
@@ -208,11 +255,12 @@ const Filter = ({loading, notFound}:Filter) => {
                     <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                       <SelectGroup className="w-[200px]">
                       <SelectLabel>Модель</SelectLabel>
-                      <SelectItem value="k4">K4</SelectItem>
-                      <SelectItem value="k5">K5</SelectItem>
-                      <SelectItem value="k6">K6</SelectItem>
-                      <SelectItem value="k7">K7</SelectItem>
-                      <SelectItem value="k8">K8</SelectItem>
+                      {uniqueModelName?.map( (title: any, index) => {
+                      if (title) {
+                        return (
+                          <SelectItem value={title} key={index}>{title}</SelectItem>
+                        )}
+                      })}
                       </SelectGroup>
                       <ScrollBar orientation="vertical"/>
                     </ScrollArea>
@@ -240,11 +288,11 @@ const Filter = ({loading, notFound}:Filter) => {
                       <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                         <SelectGroup className="w-[200px]">
                         <SelectLabel>Год выпуска</SelectLabel>
-                        <SelectItem value="2024">2024</SelectItem>
-                        <SelectItem value="2023">2023</SelectItem>
-                        <SelectItem value="2022">2022</SelectItem>
-                        <SelectItem value="2021">2021</SelectItem>
-                        <SelectItem value="2020">2020</SelectItem>
+                        {years.map(year => {
+                          return (
+                            <SelectItem value={year.toString()} key={uuidv4()}>{year}</SelectItem>
+                          )
+                        })}
                         </SelectGroup>
                         <ScrollBar orientation="vertical"/>
                       </ScrollArea>
@@ -268,16 +316,17 @@ const Filter = ({loading, notFound}:Filter) => {
                       <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                         <SelectGroup className="w-[200px]">
                           <SelectLabel>Год выпуска</SelectLabel>
-                          <SelectItem value="2024">2024</SelectItem>
-                          <SelectItem value="2023">2023</SelectItem>
-                          <SelectItem value="2022">2022</SelectItem>
-                          <SelectItem value="2021">2021</SelectItem>
-                          <SelectItem value="2020">2020</SelectItem>
+                          {years.map(year => {
+                          return (
+                            <SelectItem value={year.toString()} key={uuidv4()}>{year}</SelectItem>
+                          )
+                        })}
                         </SelectGroup>
                         <ScrollBar orientation="vertical"/>
                       </ScrollArea>
                   </SelectContent>
                 </Select>
+                <FormMessage className="text-sm"/>
               </FormItem>
               )}
               />
@@ -308,6 +357,7 @@ const Filter = ({loading, notFound}:Filter) => {
                       </ScrollArea>
                   </SelectContent>
                 </Select>
+                <FormMessage className="text-sm"/>
               </FormItem>
               )}
               />
@@ -336,6 +386,7 @@ const Filter = ({loading, notFound}:Filter) => {
                       </ScrollArea>
                   </SelectContent>
                 </Select>
+              <FormMessage className="text-sm"/>
               </FormItem>
               )}
               />
@@ -350,7 +401,7 @@ const Filter = ({loading, notFound}:Filter) => {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
-                      <Input placeholder="Цена от, ₩" {...field} onChange={(e) => {spaces(e); field.onChange(e)}}  className="rounded-r-none placeholder:text-slate-400"/>
+                      <Input placeholder="Цена от, ₩" autoComplete="off" {...field} onChange={(e) => {spaces(e); field.onChange(e)}}  className="rounded-r-none placeholder:text-slate-400"/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -362,7 +413,7 @@ const Filter = ({loading, notFound}:Filter) => {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
-                      <Input placeholder="до" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-l-none placeholder:text-slate-400"/>
+                      <Input placeholder="до" {...field} autoComplete="off" onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-l-none placeholder:text-slate-400"/>
                     </FormControl>
                     <FormMessage className="text-sm"/>
                   </FormItem>
@@ -376,7 +427,7 @@ const Filter = ({loading, notFound}:Filter) => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
-                    <Input placeholder="Номер машины" {...field} className="placeholder:text-slate-400"/>
+                    <Input placeholder="Номер машины" autoComplete="off" {...field} className="placeholder:text-slate-400"/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -404,11 +455,14 @@ const Filter = ({loading, notFound}:Filter) => {
                       <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                         <SelectGroup className="w-[200px]">
                           <SelectLabel>Поколение</SelectLabel>
-                          <SelectItem value="1">The New K5 Hybrid (23-24) The New K5 Hybrid (2023)</SelectItem>
-                          <SelectItem value="2">The New K5 Hybrid (20-23)</SelectItem>
-                          <SelectItem value="3">New K5 (13-15)</SelectItem>
-                          <SelectItem value="4">New K5 Hybrid (13-15)</SelectItem>
-                          <SelectItem value="5">K5 (09-10)</SelectItem>
+                          {uniqueGeneration?.map( (title: any) => {
+                            if (title) {
+                              return (
+                                <SelectItem value={title} key={uuidv4()}>{title}</SelectItem>
+                              )
+                            }
+                            return
+                      })}
                         </SelectGroup>
                         <ScrollBar orientation="vertical"/>
                       </ScrollArea>
@@ -482,7 +536,7 @@ const Filter = ({loading, notFound}:Filter) => {
                 render={({ field }) => (
                   <FormItem className="w-full mb-3">
                     <FormControl>
-                      <Input placeholder="Пробег от" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-r-none placeholder:text-slate-400"/>
+                      <Input placeholder="Пробег от" autoComplete="off" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-r-none placeholder:text-slate-400"/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -494,7 +548,7 @@ const Filter = ({loading, notFound}:Filter) => {
                 render={({ field }) => (
                   <FormItem className="w-full mb-3">
                     <FormControl>
-                      <Input placeholder="до" {...field} onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-l-none placeholder:text-slate-400"/>
+                      <Input placeholder="до" {...field} autoComplete="off" onChange={(e) => {spaces(e); field.onChange(e)}} className="rounded-l-none placeholder:text-slate-400"/>
                     </FormControl>
                     <FormMessage className="text-sm"/>
                   </FormItem>
@@ -534,21 +588,22 @@ const Filter = ({loading, notFound}:Filter) => {
               />
               <FormField
                 control={form.control}
-                name="engineType"
+                name="fuelType"
                 render={({ field }) => (
                   <FormItem className="w-full mb-3 min-[720px]:w-1/2 lg:max-w-[324px]">
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Тип двигателя" />
+                          <SelectValue placeholder="Тип топлива" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="overflow-y-auto w-[212px]">
                     <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                       <SelectGroup className="w-[200px]">
-                        <SelectLabel>Тип двигателя</SelectLabel>
-                        <SelectItem value="electro">Электро</SelectItem>
-                        <SelectItem value="ice">ДВС</SelectItem>
+                        <SelectLabel>Тип топлива</SelectLabel>
+                        <SelectItem value="дизельное топливо">Дизель</SelectItem>
+                        <SelectItem value="бензин">Бензин</SelectItem>
+                        <SelectItem value="lpg">LPG</SelectItem>
                         </SelectGroup>
                       <ScrollBar orientation="vertical"/>
                     </ScrollArea>
@@ -601,11 +656,14 @@ const Filter = ({loading, notFound}:Filter) => {
                     <ScrollArea className="overflow-y-auto max-h-[218px] w-[206px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full">
                       <SelectGroup className="w-[200px]">
                         <SelectLabel>Цвет</SelectLabel>
-                        <SelectItem value="any">Любой</SelectItem>
-                        <SelectItem value="white">Белый</SelectItem>
-                        <SelectItem value="black">Черный</SelectItem>
-                        <SelectItem value="grey">Серый</SelectItem>
-                        <SelectItem value="beige">Бежевый</SelectItem>
+                        {uniqueColors?.map( (title: any) => {
+                          if (title) {
+                            return (
+                              <SelectItem value={title} key={uuidv4()}>{title[0]?.toUpperCase() + title?.slice(1)}</SelectItem>
+                            )
+                          }
+                          return
+                      })}
                         </SelectGroup>
                       <ScrollBar orientation="vertical"/>
                     </ScrollArea>
@@ -620,7 +678,7 @@ const Filter = ({loading, notFound}:Filter) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="Номер машины" {...field} 
+                      <Input autoComplete="off" placeholder="Номер машины" {...field} 
                       className="w-full min-[720px]:w-1/2 min-[720px]:pl-[6px] min-[720px]:hidden"/>
                     </FormControl>
                     <FormMessage />

@@ -11,8 +11,6 @@ import Loading from './loading'
 import { api } from "@/trpc/server";
 import { Suspense } from "react"
 
-export const dynamic = 'force-static'
-
 interface SearchParams {
   page?: string,
   carBrand?: string,
@@ -25,7 +23,7 @@ interface SearchParams {
   engineCapacityTo?: string,
   generation?: string,
   enginePower?: string,
-  engineType?: string,
+  fuelType?: string,
   transmission?: string,
   color?: string,
   carNumber?: string,
@@ -33,14 +31,6 @@ interface SearchParams {
   mileageTo?: string,
 }
 
-async function getSomething() {  
-  //delay here
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  //if link is /users then we load data, if /users/asdasd then it will be not found
-  const res = await fetch('https://jsonplaceholder.typicode.com/users/')
-  .then(response => response.json())
-  return res
-}
 
 export default async function Details({
   searchParams,
@@ -48,16 +38,16 @@ export default async function Details({
   searchParams: SearchParams
 }) {
   let carsList:any
-  
+  let allCarsList:any
   try{
-  carsList = await api.cars.listAll();
-   // carsList = await api.cars.getFiltered(searchParams);
+  carsList = await api.cars.getFiltered(searchParams);
+  allCarsList = await api.cars.getFiltered({});
+
   } catch(err) {
     carsList = []
+    allCarsList = []
     console.log(err)
   }
-
-  //const delay = await getSomething()
 
   //pagination skipping posts
   const postLimitPerPage = 5
@@ -68,13 +58,11 @@ export default async function Details({
   
     return (
     <div className="flex justify-center">
-      {JSON.stringify(carsList)}
       {/* if no data found on our fetching show another component */}
-          {carsList[0] ? (
             <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
               <div className="max-lg:order-first w-full flex flex-col items-center">
               <Suspense fallback={<Loading/>} >
-                <Filter/>
+                <Filter filterData={allCarsList} notFound={carsList[0] ? false : true}/>
               </Suspense>
               </div>
               <AdsBanner/>
@@ -82,18 +70,22 @@ export default async function Details({
                 <Breadcrumbs/>
               </div>
               <div className="lg:mt-10 mb-[25px] py-[15px] max-lg:px-4 text-slate-500 text-base flex justify-start w-full max-w-[720px]">
-                Найдено: {carsList.length}
+                Найдено: {carsList.length || '0'}
               </div>
-              <CarList data={showPosts}/>
-              <div className="w-full max-w-[720px]">
-              </div>
-              <Suspense fallback={<Loading/>} >
-              <PaginationComponent page={Number(searchParams.page) || 1} maxPages={Math.ceil(carsList.length / postLimitPerPage)}/>
-              </Suspense>
-
-            </div>
+              { carsList[0] ? (
+              <>
+                <div className="w-full max-w-[720px]">
+                  <CarList data={showPosts}/>
+                </div>
+                <Suspense fallback={<Loading/>} >
+                <PaginationComponent page={Number(searchParams.page) || 1} maxPages={Math.ceil(carsList.length / postLimitPerPage)}/>
+                </Suspense>
+              </>
             ) : <NotFoundCatalog/>
-          }    
+              }    
+            </div>
+
+
       <div className="max-lg:hidden ml-4 xl:ml-10 mt-[121px] mb-[50px]">
         <ContacsUs/>
       </div>

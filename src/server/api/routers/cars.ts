@@ -30,7 +30,7 @@ export const carsRouter = createTRPCRouter({
     engineCapacityTo: z.string().optional(),
     generation: z.string().optional(),
     enginePower:z.string().optional(),
-    engineType: z.string().optional(),
+    fuelType: z.string().optional(),
     transmission: z.string().optional(),
     color: z.string().optional(),
     carNumber: z.string().optional(),
@@ -43,22 +43,38 @@ export const carsRouter = createTRPCRouter({
     
     const user = await db.car.findMany({
       where: {
-        brand_id: input.carBrand ? input?.carBrand : undefined,
-        model_id: input.carModel ? input?.carModel : undefined,
+        brand_id: {
+          contains: input.carBrand ? input?.carBrand : undefined, 
+          mode: 'insensitive'
+        },
+        model_id: {
+          contains: input.carModel ? input?.carModel : undefined,
+          mode: 'insensitive'
+        },
         production_year: {gte: input.yearFrom ? Number(input.yearFrom) : undefined,
           lte: input.yearTo ? Number(input.yearTo) : undefined,
         },
-        price: {gte: input.priceFrom ? Number(input.priceFrom) : undefined,
-          lte: input.priceTo ? Number(input.priceTo) : undefined
+        price: {gte: input.priceFrom ? Number(input.priceFrom)/1000 : undefined,
+          lte: input.priceTo ? Number(input.priceTo)/1000 : undefined
         },
         engine_capacity: {gte: input.engineCapacityFrom ? parseFloat(input.engineCapacityFrom) : undefined,
           lte: input.engineCapacityTo ? parseFloat(input.engineCapacityTo) : undefined
         },
-        generation_id: input.generation ? input.generation : undefined,
+        generation_id: {
+          contains: input.generation ? input.generation : undefined, 
+          mode: 'insensitive'
+        },
+        
         engine_power: input.enginePower ? Number(input.enginePower) : undefined,
-        fuel_type_ru: input.engineType ? input.engineType : undefined,
+        fuel_type_ru: {
+          contains: input.fuelType ? input.fuelType : undefined, 
+          mode: 'insensitive'
+        },
         car_drive: (input.transmission && input.transmission !== 'any') ? input.transmission : undefined,
-        color: input.color ? input.color : undefined,
+        color_ru: {
+          contains: input.color ? input.color : undefined, 
+          mode: 'insensitive'
+        },
         car_number: input.carNumber ? { contains: input.carNumber, } : undefined,
         distance: {gte: input.mileageFrom ? Number(input.mileageFrom) : undefined,
           lte: input.mileageTo ? Number(input.mileageTo) : undefined,
@@ -67,10 +83,5 @@ export const carsRouter = createTRPCRouter({
     });
            
     return user;
-  }),
-  listAll: publicProcedure
-  .query(async () => {
-    const car = await db.car.findMany();
-    return car;
   }),
 });
