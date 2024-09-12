@@ -38,10 +38,10 @@ export default async function Details({
 }) {
   let carsList:any
   let allCarsList:any
+  const tryMe = searchParams;
   try{
-  carsList = await api.cars.getFiltered(searchParams);
+  carsList = await api.cars.getFiltered(tryMe);
   allCarsList = await api.cars.getFiltered({});
-
   } catch(err) {
     carsList = []
     allCarsList = []
