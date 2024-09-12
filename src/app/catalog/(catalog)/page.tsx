@@ -31,6 +31,8 @@ interface SearchParams {
   mileageTo?: string,
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function Details({
   searchParams,
 }: {
@@ -38,9 +40,9 @@ export default async function Details({
 }) {
   let carsList:any
   let allCarsList:any
-  const tryMe = searchParams;
+  
   try{
-  carsList = await api.cars.getFiltered(tryMe);
+  carsList = await api.cars.getFiltered(searchParams);
   allCarsList = await api.cars.getFiltered({});
   } catch(err) {
     carsList = []
