@@ -84,4 +84,10 @@ export const carsRouter = createTRPCRouter({
            
     return user;
   }),
+
+  getCars: publicProcedure
+  .query(async () => {
+    const user = await db.car.findMany({});
+    return user;
+  }),
 });

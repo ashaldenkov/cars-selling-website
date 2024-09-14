@@ -7,7 +7,6 @@ const Ads = () => {
         <Image
             className='h-full w-auto lg:ml-[60px]'
             src={Logo}
-            priority={true}
             alt="We can put your ads here!"
         />
         <div className='text-adText ml-5 lg:ml-[50px] max-[350px]:text-xs'>

@@ -19,7 +19,6 @@ export default async function Home() {
         <div className="max-lg:order-first flex justify-center">
           <Image
           className='h-auto w-auto max-lg:max-h-[250px]'
-          //priority={true}
           src={carImg}
           alt="Car image"
           />

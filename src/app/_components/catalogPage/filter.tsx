@@ -34,7 +34,6 @@ import { v4 as uuidv4 } from 'uuid';
   interface Filter {
     loading?: true;
     notFound?:boolean;
-    filterData?: any;
   }
 
   const Icon = ({isOpen}:{isOpen: boolean}) => {
@@ -45,7 +44,7 @@ import { v4 as uuidv4 } from 'uuid';
     );
   };
 
-const Filter = ({loading, notFound, filterData}:Filter) => {
+const Filter = ({loading, notFound}:Filter) => {
 
   const [filterExtended, setFilterExtended] = useState(false); 
   const [prevData, setPrevData] = useState<any>(null)
@@ -58,7 +57,7 @@ const Filter = ({loading, notFound, filterData}:Filter) => {
 
   //clearing parameters on page refresh
   useEffect( () => {
-    
+
     for (const [key, value] of params.entries()) {
       if (key !== 'page') {
         params.delete(key);
@@ -176,33 +175,18 @@ const Filter = ({loading, notFound, filterData}:Filter) => {
   }
   
   //getting select options from db
-//brand filter
-  const brandName = filterData?.map( (car:any) => car.brand_id.toLowerCase())
-  const uniqueBrandName = Array.from(new Set(brandName));
+//brand options
+  const uniqueBrandName = ["hyundai","kia","genesis","bmw","cadillac","ferrari","ford","lincoln","kg mobility","audi","porche","jeep","tesla","fiat","chevrolet","lexus","toyota"]
 
-//model filter
-  const modelName = filterData?.map( (car:any) => car.model_id?.toLowerCase())
-  const uniqueModelName = Array.from(new Set(modelName));
+//model options
+  const uniqueModelName = ["Modern Porter II","Grandeur","New Tucson","K3","The all new Grandeur","Genesis","Santa FE (tm)","EQ900","Grand Bird Parkway","LF Sonata","G70","The New Mojave","5 series","All new tucson","3 series","458","Grandeur hg","Explorer","MKS 3.7","Korando cclubby","G4 rexton","A6","Mojave","Cayenne","Modern New Granger 2.0","SF90","Bongo III","All New K7","The All New G80","The New K3","Boxster(718)","Grand cherokee","X5","The New Santa FE","7 series","GV80","All new mighty","All-new Tucson","The new Grandeur","Korando Turismo","Rexton W","All new Carnival","Rexton Sports","E- Mighty","Q5","Avante","Macan","Model y","Modern Aslan G300","500","F430","Suburban","ATS","All new Mighty Refrigerated ","Ray","Santa FE","Super","a4(2)","Genesis GH G380","911","Soul","UX EV 300e","A8","CT6","The new Grand Starex 3 seat","Roma","The new Carnival","The new max Cruise","XT4","A7","Veracruz","812","Xaxcruz","Escalade","812 GTS","Tucson IX","Panamera","Grand Starex","The new grand Starex","The New Bongo III","All New Sorento","6 series","The all new Tucson","Staria","Venza","The new Grandeur IG"]
 
-  //year filter
-  function createYearArr(maxYear: number){
-    const start = 2010;
-    const arr = [];
-    
-    for (let i = start; i <= maxYear; i++){
-      arr.push(i);
-    }
-    arr.sort((a, b) => b - a);
-    return arr;
-  }
-  const prodYears = filterData?.map( (car:any) => car.production_year)
-  const years = createYearArr(Math.max.apply(null, prodYears))
+  //year options
+  const years = [2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010]
   //generation
-  const generation = filterData?.map( (car:any) => car.generation_id)
-  const uniqueGeneration = Array.from(new Set(generation));
+  const uniqueGeneration = ["CRDiSupercap extra long axle","CRDi Supercap extra long axis smart","car rental prime","2WD premium","GDI prestige","Exclusive","BH 330 Modern","4WD Inspiration","AWDpremium luxury",null,"Car Premium","GDiExclusive","Telite","4WD president","7 Generation","2WD style","6 Generation","5 generation","V8 Italy","Rental Car Premium","5 Generation","V6"," 2WD park","4WD heritage","4 Generation","The Master 3.0","2 Generation","V8 hybrid spider","Cargo High Built-in Truck One ton","prestige","AWD Basic type","High refrigerated truck super cab twin comp","High interior super cab","CRDiSupercap extra long axle premium","80th Anniversary","AWD prestige","5 Generation 740i","car rental modern","2.5 Tone regular cap long axis high top","Turbo 2WD Style Fever","4WD 9 seater TX plus","Wing body manual","Refrigerated Truck Super Cab Twin Comp","2wd rx7 prestige","7 Seater Limousine Diesel VIP","aerial work platform","built-in truck 3.5 ton","45 TDIquattro dynamic","cargo built-in truck One tone king cap","car rental style","sports supreme","AWD long range","Modern","v8","10 Generation","AWDpremium","truck 3.5 ton","Prestige"," Cargo CRDiDouble cab extra long axis","2WD MLX top-of-the-line","truck 4.5 ton","Generation 2.0","AWDprestige","One Generation","safety","3 Generation"," cargo built-in truck Onetone king cap low floor","Power Gate Double Cap","Laredo","awd premium","Van Smart","CRDiSupercap extra long axis smart","cargo refrigerated truck One tone king cap","V8","9 Seater Diesel Luxury","4wd finest edition","AWD sports","3.9V8","AWD premium luxury","55 TDIquattro dynamic","4WD 380VXL premium","6.5V12","V12 spider","4WDExclusive Special","4wd lmx20 premium","4WD Exclusive","AWD","camping car4wd","limousine 6 seater exclusive","2.5 Tone regular cap long axis low floor","Cargo Truck Plus Type","4WDFinest Edition","Wingbody 3.5ton","2WDnobless","9 Generation","4wd exclusive","AWD Sport","premium","GDI trendy","2WDNoblesse Special","2WDExclusive","AWD Inspiration","2wdinspiration","Limited","cargo built-in truck Onetone king cap"]
   //color
-  const colors = filterData?.map( (car:any) => car.color_ru?.toLowerCase())
-  const uniqueColors = Array.from(new Set(colors));
+  const uniqueColors = ["белый","черный","жемчужно-серый","серый","","от белого","красный","серебро","желтый","крысиный цвет","синий","красный ( алый)","синий ( индиго , темно-синий )","зеленый","коричневый"]
 
   return (
 

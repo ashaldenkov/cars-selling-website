@@ -47,7 +47,6 @@ const ImageCarousel = ({links}:Images) => {
                             <Image
                             className='object-cover'
                             src={CarPreview}
-                            priority={true}
                             width={1024}
                             height={768}
                             alt="Car image"
@@ -61,7 +60,6 @@ const ImageCarousel = ({links}:Images) => {
                     <Image
                     className='object-cover w-1/2 mx-auto'
                     src={NoImage}
-                    priority={true}
                     width={1024}
                     height={768}
                     alt="Car image"
@@ -101,7 +99,6 @@ const ImageCarousel = ({links}:Images) => {
                             <button onClick={() => firstSwiper.slideTo(index)}>
                                 <Image
                                 className='h-[100px] w-[100px] object-cover rounded-md'
-                                priority={true}
                                 src={CarPreview}
                                 width={1024}
                                 height={768}
@@ -132,7 +129,6 @@ const ImageCarousel = ({links}:Images) => {
                                     <div onClick={() => firstSwiper.slideTo(index)}>
                                         <Image
                                         className={`object-cover h-[100px] ${ activeIndex==index ? 'scale-[0.85]' : null}`}
-                                        priority={true}
                                         src={CarPreview}
                                         width={1024}
                                         height={768}

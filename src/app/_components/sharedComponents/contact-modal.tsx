@@ -7,7 +7,6 @@ const ContactModal = () => {
             className='h-auto w-auto'
             src={SuccessIcon}
             alt="Success"
-            priority={true}
         />
         <div className='mt-4 text-center text-lg font-semibold'>Скоро мы<br/>свяжемся с вами</div>
     </div>

@@ -58,7 +58,6 @@ const InsuranceHistory = () => {
                 src={Parts}
                 width={1024}
                 height={768}
-                priority={true}
                 alt="Insurance history image"
             />
             <div className='flex flex-wrap max-w-[504px] gap-y-[21px] gap-x-[21px]'>

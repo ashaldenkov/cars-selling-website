@@ -39,14 +39,11 @@ export default async function Details({
   searchParams: SearchParams
 }) {
   let carsList:any
-  let allCarsList:any
-  
+
   try{
   carsList = await api.cars.getFiltered(searchParams);
-  allCarsList = await api.cars.getFiltered({});
   } catch(err) {
     carsList = []
-    allCarsList = []
     console.log(err)
   }
 
@@ -63,7 +60,7 @@ export default async function Details({
             <div className="flex flex-col items-center min-h-screen w-full max-lg:max-w-full max-w-[720px]">
               <div className="max-lg:order-first w-full flex flex-col items-center">
               <Suspense fallback={<Loading/>} >
-                <Filter filterData={allCarsList} notFound={carsList[0] ? false : true}/>
+                <Filter notFound={carsList[0] ? false : true}/>
               </Suspense>
               </div>
               <AdsBanner/>

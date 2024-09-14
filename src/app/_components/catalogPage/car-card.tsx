@@ -55,7 +55,6 @@ const CarCard = ({carData}: Car) => {
                 src={ carData.images ? CarPreview : NoImage}
                 width={1024}
                 height={768}
-                priority={true}
                 alt="Car image"
             />
             <div className='text-sm text-slate-500 flex flex-col justify-between'>
