@@ -1,5 +1,4 @@
-![Cloud Build Production](https://storage.googleapis.com/naonow-cloudbuild-badges/builds/server/branches/main.svg)
-![Cloud Build Development](https://storage.googleapis.com/naonow-cloudbuild-badges/builds/server/branches/dev.svg)
+![Cloud Build Production] https://wegugin-three.vercel.app/
 
 ## Development
 
