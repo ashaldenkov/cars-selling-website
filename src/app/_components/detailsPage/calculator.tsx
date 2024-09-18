@@ -6,15 +6,7 @@ interface Calc {
     loading?: boolean;
 }
 
-async function getSomething() {  
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    const res = await fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    return res
-  }
-
 async function  Calculator ({loading}: Calc) {
-    const list2 = await getSomething()
 
   return (
     <div className='max-lg:px-4 mb-10 max-lg:mb-8' id='calculator'>
