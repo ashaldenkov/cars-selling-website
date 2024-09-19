@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { db } from '@/server/db';
 
-import { createTRPCRouter, publicProcedure } from "@/server/trpc";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 
 export const carsRouter = createTRPCRouter({
@@ -79,19 +79,17 @@ export const carsRouter = createTRPCRouter({
         distance: {gte: input.mileageFrom ? Number(input.mileageFrom) : undefined,
           lte: input.mileageTo ? Number(input.mileageTo) : undefined,
         },
-      }
+      },
+      take: 5,
+      skip: (input.page - 1) * 5 || 0,
     });
            
     return user;
   }),
-
-  getCars: publicProcedure
+  
+  getTotal: publicProcedure
   .query(async () => {
-    const user = await db.car.findMany({});
+    const user = await db.car.count()
     return user;
-  }),
-  test: publicProcedure
-  .query(async () => {
-    return "Hello, world!";
   }),
 });

@@ -38,12 +38,15 @@ export default async function Details({
 }: {
   searchParams: SearchParams
 }) {
-  let carsList:any
+  let carsList: any
+  let carsAmount: number
 
   try{
   carsList = await api.cars.getFiltered(searchParams);
+  carsAmount = await api.cars.getTotal();
   } catch(err) {
     carsList = []
+    carsAmount = 0
     console.log(err)
   }
 
@@ -68,7 +71,7 @@ export default async function Details({
                 <Breadcrumbs/>
               </div>
               <div className="lg:mt-10 mb-[25px] py-[15px] max-lg:px-4 text-slate-500 text-base flex justify-start w-full max-w-[720px]">
-                Найдено: {carsList.length || '0'}
+                Найдено: {carsAmount || '0'}
               </div>
               { carsList[0] ? (
               <>
@@ -76,7 +79,7 @@ export default async function Details({
                   <CarList data={showPosts}/>
                 </div>
                 <Suspense fallback={<Loading/>} >
-                <PaginationComponent page={Number(searchParams.page) || 1} maxPages={Math.ceil(carsList.length / postLimitPerPage)}/>
+                <PaginationComponent page={Number(searchParams.page) || 1} maxPages={Math.ceil(carsAmount / postLimitPerPage)}/>
                 </Suspense>
               </>
             ) : <NotFoundCatalog/>
