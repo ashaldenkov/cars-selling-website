@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 
 import NoImage from '@/app/_images/noimage.png'
 import CarPreview from '@/app/_images/carPreview.avif'
-
+import { useEffect } from 'react';
 
 const paginationClasses = `[&_.swiper-pagination]:right-0 [&_.swiper-pagination]:left-auto [&_.swiper-pagination]:mb-2 [&_.swiper-pagination]:mr-2 
         [&_.swiper-pagination]:w-fit [&_.swiper-pagination]:bottom-0 [&_.swiper-pagination]:bg-[#1E1E1EB2] [&_.swiper-pagination]:text-xs	
@@ -26,6 +26,10 @@ const ImageCarousel = ({links}:Images) => {
     const [secondSwiper, setSecondSwiper] = useState<any>(null);
     const [activeIndex, setActiveIndex] = useState<number>(1);
     const size = useWindowsize();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
   return (
     <div className='w-full z-0'>

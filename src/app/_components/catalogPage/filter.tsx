@@ -30,12 +30,12 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 
-import { api } from "@/trpc/react";
-
 
   interface Filter {
-    loading?: true;
+    loading?: boolean;
     notFound?:boolean;
+    queryParams?:any;
+    setQueryParams?: any;
   }
 
   const Icon = ({isOpen}:{isOpen: boolean}) => {
@@ -46,27 +46,27 @@ import { api } from "@/trpc/react";
     );
   };
 
-const Filter = ({loading, notFound}:Filter) => {
+const Filter = ({loading, notFound, setQueryParams}:Filter) => {
 
   const [filterExtended, setFilterExtended] = useState(false); 
   const [prevData, setPrevData] = useState<any>(null)
 
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace, push } = useRouter();
+  // const searchParams = useSearchParams();
+  // const pathname = usePathname();
+  // const { replace, push } = useRouter();
 
-  const params = new URLSearchParams(searchParams);
+  // const params = new URLSearchParams(searchParams);
 
   //clearing parameters on page refresh
-  useEffect( () => {
+  // useEffect( () => {
 
-    for (const [key, value] of params.entries()) {
-      if (key !== 'page') {
-        params.delete(key);
-      } 
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, [])
+  //   for (const [key, value] of params.entries()) {
+  //     if (key !== 'page') {
+  //       params.delete(key);
+  //     } 
+  //   }
+  //   replace(`${pathname}?${params.toString()}`);
+  // }, [])
 
   //creates spaces when we enter price and coverts it back to string
   const spaces = (e:any) => {
@@ -96,6 +96,7 @@ const Filter = ({loading, notFound}:Filter) => {
     carNumber: z.string(),
     mileageFrom: z.string(),
     mileageTo: z.string(),
+    page: z.string().optional(),
   }).refine((obj) => {
     let tempPrice1 = parseInt(obj.priceFrom.replace(/\s/g, ""))
     let tempPrice2 = parseInt(obj.priceTo.replace(/\s/g, ""))
@@ -155,20 +156,14 @@ const Filter = ({loading, notFound}:Filter) => {
      result.priceTo = result.priceTo.replace(/\s/g, "")
      result.mileageFrom = result.mileageFrom.replace(/\s/g, "")
      result.mileageTo = result.mileageTo.replace(/\s/g, "")
-    for (const [key, value] of Object.entries(result)) {
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
-    }
-    params.set('page', '1')
+
+    result.page = '1';
     setPrevData(values)
-    push(`${pathname}?${params.toString()}`);
+    setQueryParams(result)
     }
   
   function onReset() {
-    replace(`${pathname}`)
+    setQueryParams({page: '1'})
     form.reset()
   }
 
@@ -190,7 +185,6 @@ const Filter = ({loading, notFound}:Filter) => {
   //color
   const uniqueColors = ["белый","черный","жемчужно-серый","серый","","от белого","красный","серебро","желтый","крысиный цвет","синий","красный ( алый)","синий ( индиго , темно-синий )","зеленый","коричневый"]
 
-  const cars = api.cars.getFiltered.useQuery({})
 
 
   return (

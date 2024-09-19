@@ -11,12 +11,9 @@ import Calculator from "@/app/_components/detailsPage/calculator";
 import LoadingCalc from "@/app/_components/LoadingVersionPages/loading-calculator";
 import ImageCarousel from "@/app/_components/detailsPage/image-carousel";
 import { api } from "@/trpc/server";
-import { sql } from "@vercel/postgres";
 
   export const generateStaticParams = async () => {
     const carList = await api.cars.getFiltered({});
-    //temporary solution commented because had problems with SSG and trpc api call
-    //const carList = await sql`SELECT * FROM car`
     return carList?.map( car => {id: car.id.toString()})
   }
 
