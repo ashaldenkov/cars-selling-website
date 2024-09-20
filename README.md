@@ -1,4 +1,4 @@
-![Cloud Build Production] https://wegugin-three.vercel.app/
+![Cloud Build Production] https://wegugin-git-client-ashaldenkovs-projects.vercel.app?_vercel_share=F058aCq19wr2WRhvNeV8X2KYxDt5iEs5
 
 ## Development
 
