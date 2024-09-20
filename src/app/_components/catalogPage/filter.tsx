@@ -32,8 +32,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 
   interface Filter {
-    loading?: true;
+    loading?: boolean;
     notFound?:boolean;
+    queryParams?:any;
+    setQueryParams?: any;
   }
 
   const Icon = ({isOpen}:{isOpen: boolean}) => {
@@ -44,27 +46,27 @@ import { v4 as uuidv4 } from 'uuid';
     );
   };
 
-const Filter = ({loading, notFound}:Filter) => {
+const Filter = ({loading, notFound, setQueryParams}:Filter) => {
 
   const [filterExtended, setFilterExtended] = useState(false); 
   const [prevData, setPrevData] = useState<any>(null)
 
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace, push } = useRouter();
+  // const searchParams = useSearchParams();
+  // const pathname = usePathname();
+  // const { replace, push } = useRouter();
 
-  const params = new URLSearchParams(searchParams);
+  // const params = new URLSearchParams(searchParams);
 
   //clearing parameters on page refresh
-  useEffect( () => {
+  // useEffect( () => {
 
-    for (const [key, value] of params.entries()) {
-      if (key !== 'page') {
-        params.delete(key);
-      } 
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, [])
+  //   for (const [key, value] of params.entries()) {
+  //     if (key !== 'page') {
+  //       params.delete(key);
+  //     } 
+  //   }
+  //   replace(`${pathname}?${params.toString()}`);
+  // }, [])
 
   //creates spaces when we enter price and coverts it back to string
   const spaces = (e:any) => {
@@ -94,6 +96,7 @@ const Filter = ({loading, notFound}:Filter) => {
     carNumber: z.string(),
     mileageFrom: z.string(),
     mileageTo: z.string(),
+    page: z.string().optional(),
   }).refine((obj) => {
     let tempPrice1 = parseInt(obj.priceFrom.replace(/\s/g, ""))
     let tempPrice2 = parseInt(obj.priceTo.replace(/\s/g, ""))
@@ -153,20 +156,14 @@ const Filter = ({loading, notFound}:Filter) => {
      result.priceTo = result.priceTo.replace(/\s/g, "")
      result.mileageFrom = result.mileageFrom.replace(/\s/g, "")
      result.mileageTo = result.mileageTo.replace(/\s/g, "")
-    for (const [key, value] of Object.entries(result)) {
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
-    }
-    params.set('page', '1')
+
+    result.page = '1';
     setPrevData(values)
-    push(`${pathname}?${params.toString()}`);
+    setQueryParams(result)
     }
   
   function onReset() {
-    replace(`${pathname}`)
+    setQueryParams({page: '1'})
     form.reset()
   }
 
@@ -187,6 +184,8 @@ const Filter = ({loading, notFound}:Filter) => {
   const uniqueGeneration = ["CRDiSupercap extra long axle","CRDi Supercap extra long axis smart","car rental prime","2WD premium","GDI prestige","Exclusive","BH 330 Modern","4WD Inspiration","AWDpremium luxury",null,"Car Premium","GDiExclusive","Telite","4WD president","7 Generation","2WD style","6 Generation","5 generation","V8 Italy","Rental Car Premium","5 Generation","V6"," 2WD park","4WD heritage","4 Generation","The Master 3.0","2 Generation","V8 hybrid spider","Cargo High Built-in Truck One ton","prestige","AWD Basic type","High refrigerated truck super cab twin comp","High interior super cab","CRDiSupercap extra long axle premium","80th Anniversary","AWD prestige","5 Generation 740i","car rental modern","2.5 Tone regular cap long axis high top","Turbo 2WD Style Fever","4WD 9 seater TX plus","Wing body manual","Refrigerated Truck Super Cab Twin Comp","2wd rx7 prestige","7 Seater Limousine Diesel VIP","aerial work platform","built-in truck 3.5 ton","45 TDIquattro dynamic","cargo built-in truck One tone king cap","car rental style","sports supreme","AWD long range","Modern","v8","10 Generation","AWDpremium","truck 3.5 ton","Prestige"," Cargo CRDiDouble cab extra long axis","2WD MLX top-of-the-line","truck 4.5 ton","Generation 2.0","AWDprestige","One Generation","safety","3 Generation"," cargo built-in truck Onetone king cap low floor","Power Gate Double Cap","Laredo","awd premium","Van Smart","CRDiSupercap extra long axis smart","cargo refrigerated truck One tone king cap","V8","9 Seater Diesel Luxury","4wd finest edition","AWD sports","3.9V8","AWD premium luxury","55 TDIquattro dynamic","4WD 380VXL premium","6.5V12","V12 spider","4WDExclusive Special","4wd lmx20 premium","4WD Exclusive","AWD","camping car4wd","limousine 6 seater exclusive","2.5 Tone regular cap long axis low floor","Cargo Truck Plus Type","4WDFinest Edition","Wingbody 3.5ton","2WDnobless","9 Generation","4wd exclusive","AWD Sport","premium","GDI trendy","2WDNoblesse Special","2WDExclusive","AWD Inspiration","2wdinspiration","Limited","cargo built-in truck Onetone king cap"]
   //color
   const uniqueColors = ["белый","черный","жемчужно-серый","серый","","от белого","красный","серебро","желтый","крысиный цвет","синий","красный ( алый)","синий ( индиго , темно-синий )","зеленый","коричневый"]
+
+
 
   return (
 
