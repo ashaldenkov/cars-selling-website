@@ -12,11 +12,6 @@ import LoadingCalc from "@/app/_components/LoadingVersionPages/loading-calculato
 import ImageCarousel from "@/app/_components/detailsPage/image-carousel";
 import { api } from "@/trpc/server";
 
-  export const generateStaticParams = async () => {
-    const carList = await api.cars.getFiltered({});
-    return carList?.map( car => {id: car.id.toString()})
-  }
-
 
 export default async function Details( { params }: {
   params: { carID: string }

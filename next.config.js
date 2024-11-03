@@ -27,13 +27,18 @@ const config = {
     },
     {
       protocol: 'https',
+        hostname: 'www.ixbt.com',
+        port: '',
+        pathname: '/**'
+    },
+    {
+      protocol: 'https',
         hostname: 'habsida-intercar.s3.ap-northeast-2.amazonaws.com',
         port: '',
         pathname: '/**'
     },],
   }
 };
-
 export default config;
 
 

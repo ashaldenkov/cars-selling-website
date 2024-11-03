@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import { ru } from 'date-fns/locale'
 import Link from 'next/link'
 import NoImage from '@/app/_images/noimage.png'
-import CarPreview from '@/app/_images/carPreview.avif'
 
 
 interface Car {
@@ -52,7 +51,7 @@ const CarCard = ({carData}: Car) => {
         <div className='flex max-lg:mt-2.5 min-[720px]:order-first'>
             <Image
                 className='w-[170px] h-[127.5px] max-lg:order-first rounded mr-5'
-                src={ carData.images ? CarPreview : NoImage}
+                src={ carData.images ? 'https://www.ixbt.com/img/x780/n1/news/2024/4/4/BMW-X5-1_large.png' : NoImage}
                 width={1024}
                 height={768}
                 alt="Car image"

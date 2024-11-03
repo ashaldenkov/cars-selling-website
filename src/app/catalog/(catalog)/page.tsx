@@ -33,9 +33,6 @@ interface SearchParams {
 
 export default function Details() {
 
-
-  
-
   const [queryParams, setQueryParams] = useState<SearchParams>({})
   const {data: carsList, isLoading} = api.cars.getFiltered.useQuery(queryParams)
   const {data: carsAmount} = api.cars.getTotal.useQuery(queryParams)
