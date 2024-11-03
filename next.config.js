@@ -27,7 +27,7 @@ const config = {
     },
     {
       protocol: 'https',
-        hostname: 'ixbt.com',
+        hostname: 'www.ixbt.com',
         port: '',
         pathname: '/**'
     },
