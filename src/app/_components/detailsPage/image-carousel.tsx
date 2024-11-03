@@ -10,7 +10,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import NoImage from '@/app/_images/noimage.png'
-import CarPreview from '@/app/_images/carPreview.avif'
 import { useEffect } from 'react';
 
 const paginationClasses = `[&_.swiper-pagination]:right-0 [&_.swiper-pagination]:left-auto [&_.swiper-pagination]:mb-2 [&_.swiper-pagination]:mr-2 
@@ -50,7 +49,7 @@ const ImageCarousel = ({links}:Images) => {
                         <div>
                             <Image
                             className='object-cover'
-                            src={CarPreview}
+                            src='https://www.ixbt.com/img/x780/n1/news/2024/4/4/BMW-X5-1_large.png'
                             width={1024}
                             height={768}
                             alt="Car image"
@@ -103,7 +102,7 @@ const ImageCarousel = ({links}:Images) => {
                             <button onClick={() => firstSwiper.slideTo(index)}>
                                 <Image
                                 className='h-[100px] w-[100px] object-cover rounded-md'
-                                src={CarPreview}
+                                src='https://www.ixbt.com/img/x780/n1/news/2024/4/4/BMW-X5-1_large.png'
                                 width={1024}
                                 height={768}
                                 alt="Car preview"
@@ -133,7 +132,7 @@ const ImageCarousel = ({links}:Images) => {
                                     <div onClick={() => firstSwiper.slideTo(index)}>
                                         <Image
                                         className={`object-cover h-[100px] ${ activeIndex==index ? 'scale-[0.85]' : null}`}
-                                        src={CarPreview}
+                                        src='https://www.ixbt.com/img/x780/n1/news/2024/4/4/BMW-X5-1_large.png'
                                         width={1024}
                                         height={768}
                                         alt="Car image"
