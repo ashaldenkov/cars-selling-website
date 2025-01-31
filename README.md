@@ -1,5 +1,6 @@
-![Cloud Build Production] https://wegugin-three.vercel.app/catalog
-
-Demo version of finished project(https://www.korean-cars-catalogue.com/)
-Built on top of Next JS and Typescript, styling with TailwindCSS. Backend uses PostgreSQL, Prisma and tRPC
+Cloud build production - https://wegugin-three.vercel.app/catalog  
+*Website for buying second-hands cars from South Korea to CIS countries*  
+  
+Created with **NextJS** and **TypeScript**, styling with **TailwindCSS**  
+Backend uses **PostgreSQL** and **Prisma** for database. **tRPC** used for API routing
 
